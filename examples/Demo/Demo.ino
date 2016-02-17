@@ -263,7 +263,7 @@ void demoCouleurs() {
 void demoCurseur() {
   minitel.cursor(true);
   newPage("DEPLACER LE CURSEUR");
-  minitel.newXY(20,12);
+  minitel.gotoXY(20,12);
   for (int i=1; i<=100; i++) {
     delay(100);
     switch (random(4)) {
