@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 17 février 2016
+   Minitel1B - Démo - Version du 18 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -276,7 +276,7 @@ void demoCurseur() {
   newPage("POSITIONNER LE CURSEUR");
   minitel.textMode();
   for (int i=1; i<1000; i++) {
-    minitel.newXY(1+random(40),3+random(22));
+    minitel.gotoXY(1+random(40),3+random(22));
     minitel.writeByte(0x20 + random(95));
   }
   minitel.cursor(false);
