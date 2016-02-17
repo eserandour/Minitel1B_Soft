@@ -104,7 +104,7 @@ void Minitel::gotoXY(byte x, byte y) {
   }
   writeByte(0x3B);           // 0x3B
   // Pc
-  if (y<=9) {
+  if (x<=9) {
 	writeByte(0x30 + x);     // Voir remarque concernant Pc p.96
   }
   else {
