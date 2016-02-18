@@ -47,7 +47,7 @@
 // 1.2.4 Codage des attributs de visualisation (voir p.91)
 // Ces fonctions sont obtenues si précédées du code ESC (0x1B).
 // Nous avons alors accès à la grille C1. On peut y accéder directement
-// en utilisant visualisation(byte attribut).
+// en utilisant attributs(byte attribut).
 // Couleur de caractère
 #define CARACTERE_NOIR    0x40
 #define CARACTERE_ROUGE   0x41
