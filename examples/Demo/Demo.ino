@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 18 février 2016
+   Minitel1B - Démo - Version du 19 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -43,24 +43,53 @@ DIN 3 : TX   <-------->  Digital Pin 7 par exemple (RX)
 Fonctions disponibles
 ---------------------
 
-Minitel(int rx, int tx, int vitesse);
-void clearScreen();
-void textMode();
-void graphicMode();  
-void specialMode();
-void attributs(byte attribut);
-void attributs(byte attribut1, byte attribut2);
-void cursor(boolean etat);
-void bip();
-void writeByte(byte b);
-void print(String chaine);
-void printChar(char caractere);  
-void printDiacriticChar(char caractere);
-void printSpecialChar(byte b);  
-byte getCharByte(char caractere);
-boolean isValidChar(byte index);
-boolean isDiacritic(char caractere);
-void gotoXY(byte x, byte y);
+  Minitel(int rx, int tx, int vitesse);
+  void writeByte(byte b);
+  
+  // Séparateurs
+  void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
+  void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
+  
+  // Curseur
+  void cursor();  // Curseur visible
+  void noCursor();  // Curseur invisible
+  void moveCursorXY(int x, int y);  // Curseur en colonne x et rangée y.
+  void moveCursorLeft(int n);  // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
+  void moveCursorRight(int n);  // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
+  void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
+  void moveCursorUp(int n);  // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
+  void moveCursorReturn(int n);  // Retour du curseur au début de la rangée courante puis curseur vers le bas de n rangées. Arrêt en bas de l'écran.
+  
+  // Effacements, Suppressions, Insertions
+  void cancel();  // Remplissage à partir de la position courante du curseur et jusqu'à la fin de la rangée par des espaces du jeu courant ayant l'état courant des attributs. Le position courante du curseur n'est pas déplacée.
+  void clearScreenFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de l'écran.
+  void clearScreenToCursor();  // Effacement depuis le début de l'écran jusqu'au curseur inclus.
+  void clearScreen();  // Effacement de tout l'écran (la position du curseur n'est pas modifiée).
+  void clearLineFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de la rangée.
+  void clearLineToCursor();  // Effacement depuis le début de la rangée jusqu'au curseur inclus.
+  void clearLine();  // Effacement total de la rangée où est le curseur.
+  void deleteChar(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
+  void insertChar(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
+  void startInsert();  // Début du mode insertion de caractères.
+  void stopInsert();  // Fin du mode insertion de caractères.
+  void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
+  void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
+  
+  // Modes
+  void textMode();
+  void graphicMode();  
+  void specialMode();
+  
+  // Contenu
+  void attributs(byte attribut); 
+  void print(String chaine);
+  void println(String chaine);
+  void println();
+  void printChar(char caractere);  
+  void printDiacriticChar(char caractere);
+  void printSpecialChar(byte b);
+  void bip();  // Bip sonore 
+  byte getCharByte(char caractere);
 
 
 Paramètres disponibles pour attributs(byte attribut)
@@ -110,6 +139,18 @@ OE_MAJUSCULE / OE_MINUSCULE
 BETA
                                           
                                                                       */
+////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////
+
+// DEBUT DU PROGRAMME
+
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -253,9 +294,9 @@ void demoCouleurs() {
 ////////////////////////////////////////////////////////////////////////
 
 void demoCurseur() {
-  minitel.cursor(true);
+  minitel.cursor();
   newPage("DEPLACER LE CURSEUR");
-  minitel.gotoXY(20,12);
+  minitel.moveCursorXY(20,12);
   for (int i=1; i<=100; i++) {
     delay(100);
     switch (random(4)) {
@@ -268,13 +309,13 @@ void demoCurseur() {
   newPage("POSITIONNER LE CURSEUR");
   minitel.textMode();
   for (int i=1; i<1000; i++) {
-    minitel.gotoXY(1+random(40),3+random(22));
+    minitel.moveCursorXY(1+random(40),3+random(22));
     minitel.writeByte(0x20 + random(0x60));
   }
   
   minitel.newScreen();
   minitel.textMode();
-  minitel.cursor(false);
+  minitel.noCursor();
   for (int i=1; i<1000; i++) {
     if (random(4)<3) { minitel.textMode(); }
     else {
