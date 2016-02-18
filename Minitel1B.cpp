@@ -208,14 +208,14 @@ void Minitel::clearLine() {  // Voir p.95
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::deleteChar(int n) {  // Voir p.95
+void Minitel::deleteChars(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeBytesP(n);  // Voir section Private ci-dessous
   writeByte(0x50);	
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::insertChar(int n) {  // Voir p.95
+void Minitel::insertChars(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeBytesP(n);  // Voir section Private ci-dessous
   writeByte(0x40);	
