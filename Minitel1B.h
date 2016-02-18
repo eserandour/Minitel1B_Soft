@@ -175,8 +175,8 @@ public:
   void clearLineFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de la rangée.
   void clearLineToCursor();  // Effacement depuis le début de la rangée jusqu'au curseur inclus.
   void clearLine();  // Effacement total de la rangée où est le curseur.
-  void deleteChar(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
-  void insertChar(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
+  void deleteChars(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
+  void insertChars(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
   void startInsert();  // Début du mode insertion de caractères.
   void stopInsert();  // Fin du mode insertion de caractères.
   void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
