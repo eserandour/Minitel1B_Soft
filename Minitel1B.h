@@ -161,7 +161,7 @@ public:
   // Curseur
   void cursor();  // Curseur visible
   void noCursor();  // Curseur invisible
-  void moveCursorXY(int x, int y);  // Curseur en colonne x et rangée y.
+  void moveCursorXY(int x, int y);  // Adressage direct du curseur en colonne x et rangée y.
   void moveCursorLeft(int n);  // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
   void moveCursorRight(int n);  // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
   void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
