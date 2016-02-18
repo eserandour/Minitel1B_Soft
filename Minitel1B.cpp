@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 18 février 2016
+   Minitel1B - Fichier source - Version du 19 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -74,7 +74,7 @@ void Minitel::newScreen() {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::newXY(byte x, byte y) {
+void Minitel::newXY(int x, int y) {
   if (x==1 && y==1) {
     writeByte(RS);
   }
@@ -92,26 +92,22 @@ void Minitel::newXY(byte x, byte y) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::gotoXY(byte x, byte y) {
-  attributs(CSI);            // 0x1B 0x5B
-  // Pr
-  if (y<=9) {
-	writeByte(0x30 + y);     // Voir remarque concernant Pr p.96
-  }
-  else {
-    writeByte(0x30 + y/10);  // Voir remarque concernant Pr p.96
-    writeByte(0x30 + y%10);  // Voir remarque concernant Pr p.96
-  }
-  writeByte(0x3B);           // 0x3B
-  // Pc
-  if (x<=9) {
-	writeByte(0x30 + x);     // Voir remarque concernant Pc p.96
-  }
-  else {
-    writeByte(0x30 + x/10);  // Voir remarque concernant Pc p.96
-    writeByte(0x30 + x%10);  // Voir remarque concernant Pc p.96
-  }
-  writeByte(0x48);           // 0x48
+void Minitel::cursor() {
+  writeByte(CON);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::noCursor() {
+  writeByte(COFF);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::moveCursorXY(int x, int y) {
+  attributs(CSI);   // 0x1B 0x5B
+  writeBytesP(y);   // Pr : Voir section Private ci-dessous
+  writeByte(0x3B);  // 0x3B
+  writeBytesP(x);   // Pc : Voir section Private ci-dessous
+  writeByte(0x48);  // 0x48
 }
 /*--------------------------------------------------------------------*/
 
@@ -119,15 +115,9 @@ void Minitel::moveCursorLeft(int n) {  // Voir p.95
   if (n==1) { writeByte(BS); }
   else if (n>1) {
 	// Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
-    attributs(CSI);            // 0x1B 0x5B
-    if (n<=9) {
-	  writeByte(0x30 + n);     // Voir remarque concernant Pn p.95
-	}
-	else {
-      writeByte(0x30 + n/10);  // Voir remarque concernant Pn p.95
-      writeByte(0x30 + n%10);  // Voir remarque concernant Pn p.95
-    }  
-    writeByte(0x44);
+    attributs(CSI);   // 0x1B 0x5B
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous  
+    writeByte(0x44);  // 0x44
   }
 }
 /*--------------------------------------------------------------------*/
@@ -136,15 +126,9 @@ void Minitel::moveCursorRight(int n) {  // Voir p.94
   if (n==1) { writeByte(HT); }
   else if (n>1) {
 	// Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
-    attributs(CSI);            // 0x1B 0x5B
-    if (n<=9) {
-	  writeByte(0x30 + n);     // Voir remarque concernant Pn p.95
-	}
-	else {
-      writeByte(0x30 + n/10);  // Voir remarque concernant Pn p.95
-      writeByte(0x30 + n%10);  // Voir remarque concernant Pn p.95
-    }  
-    writeByte(0x43);
+    attributs(CSI);   // 0x1B 0x5B
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous  
+    writeByte(0x43);  // 0x43
   }
 }
 /*--------------------------------------------------------------------*/
@@ -153,15 +137,9 @@ void Minitel::moveCursorDown(int n) {
   if (n==1) { writeByte(LF); }
   else if (n>1) {
 	// Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
-    attributs(CSI);            // 0x1B 0x5B
-    if (n<=9) {
-	  writeByte(0x30 + n);     // Voir remarque concernant Pn p.95
-	}
-	else {
-      writeByte(0x30 + n/10);  // Voir remarque concernant Pn p.95
-      writeByte(0x30 + n%10);  // Voir remarque concernant Pn p.95
-    }  
-    writeByte(0x42);
+    attributs(CSI);   // 0x1B 0x5B
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous   
+    writeByte(0x42);  // 0x42
   }
 }
 /*--------------------------------------------------------------------*/
@@ -170,15 +148,9 @@ void Minitel::moveCursorUp(int n) {
   if (n==1) { writeByte(VT); }
   else if (n>1) {
 	// Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
-    attributs(CSI);            // 0x1B 0x5B
-    if (n<=9) {
-	  writeByte(0x30 + n);     // Voir remarque concernant Pn p.95
-	}
-	else {
-      writeByte(0x30 + n/10);  // Voir remarque concernant Pn p.95
-      writeByte(0x30 + n%10);  // Voir remarque concernant Pn p.95
-    }  
-    writeByte(0x41);
+    attributs(CSI);   // 0x1B 0x5B
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous     
+    writeByte(0x41);  // 0x41
   }	
 }
 /*--------------------------------------------------------------------*/
@@ -186,6 +158,95 @@ void Minitel::moveCursorUp(int n) {
 void Minitel::moveCursorReturn(int n) {
   writeByte(CR);
   moveCursorDown(n);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::cancel() {  // Voir p.95
+  writeByte(CAN);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::clearScreenFromCursor() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  // writeByte(0x30);  Inutile
+  writeByte(0x4A);           
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::clearScreenToCursor() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeByte(0x31);
+  writeByte(0x4A);    
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::clearScreen() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeByte(0x32);
+  writeByte(0x4A);  
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::clearLineFromCursor() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  // writeByte(0x30);  Inutile
+  writeByte(0x4B);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::clearLineToCursor() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeByte(0x31);
+  writeByte(0x4B);	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::clearLine() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeByte(0x32);
+  writeByte(0x4B);	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::deleteChar(int n) {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeBytesP(n);  // Voir section Private ci-dessous
+  writeByte(0x50);	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::insertChar(int n) {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeBytesP(n);  // Voir section Private ci-dessous
+  writeByte(0x40);	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::startInsert() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B 
+  writeByte(0x34);
+  writeByte(0x68);	  
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::stopInsert() {  // Voir p.95
+  attributs(CSI);  // 0x1B 0x5B 
+  writeByte(0x34);
+  writeByte(0x6C);	  
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::deleteLines(int n) {  //Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeBytesP(n);  // Voir section Private ci-dessous    
+  writeByte(0x4D);	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::insertLines(int n) {  //Voir p.95
+  attributs(CSI);  // 0x1B 0x5B
+  writeBytesP(n);  // Voir section Private ci-dessous    
+  writeByte(0x4C);	
 }
 /*--------------------------------------------------------------------*/
 
@@ -214,21 +275,6 @@ void Minitel::attributs(byte attribut) {
   else if (attribut == GRANDEUR_NORMALE || attribut == DOUBLE_LARGEUR) {
     currentSize = attribut;
   }
-}
-/*--------------------------------------------------------------------*/
-
-void Minitel::cursor(boolean cursor) {
-  if(cursor) {
-    writeByte(CON);
-  }
-  else {
-    writeByte(COFF);
-  }
-}
-/*--------------------------------------------------------------------*/
-
-void Minitel::bip() {
-  writeByte(BEL);
 }
 /*--------------------------------------------------------------------*/
 
@@ -313,6 +359,11 @@ void Minitel::printSpecialChar(byte b) {
 }
 /*--------------------------------------------------------------------*/
 
+void Minitel::bip() {
+  writeByte(BEL);
+}
+/*--------------------------------------------------------------------*/
+
 byte Minitel::getCharByte(char caractere) {
   // Voir les codes et séquences émis en mode Vidéotex (Jeu G0 p.100).
   // Dans la chaine ci-dessous, on utilise l'échappement (\) :
@@ -353,7 +404,15 @@ boolean Minitel::isDiacritic(char caractere) {
 }
 /*--------------------------------------------------------------------*/
 
+void Minitel::writeBytesP(int n) {
+  // Pn, Pr, Pc : Voir remarques p.95 et 96
+  if (n<=9) {
+    writeByte(0x30 + n);     
+  }
+  else {
+    writeByte(0x30 + n/10);
+    writeByte(0x30 + n%10);
+  }
+}
 
-
-
-
+/*--------------------------------------------------------------------*/
