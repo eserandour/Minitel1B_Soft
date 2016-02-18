@@ -43,32 +43,24 @@ DIN 3 : TX   <-------->  Digital Pin 7 par exemple (RX)
 Fonctions disponibles
 ---------------------
 
-  Minitel(int rx, int tx, int vitesse);
-  void writeByte(byte b);
-  // Mise en page
-  void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation
-  void newXY(byte x, byte y);  // Attention ! newXY réinitialise les attributs de visualisation
-  void gotoXY(byte x, byte y);  // Curseur en colonne x et rangée y.
-  void moveCursorLeft(int n);  // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
-  void moveCursorRight(int n);  // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
-  void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
-  void moveCursorUp(int n);  // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
-  void moveCursorReturn(int n);  // Retour du curseur au début de la rangée courante puis curseur vers le bas de n rangées. Arrêt en bas de l'écran.
-  // Modes
-  void textMode();
-  void graphicMode();  
-  void specialMode();
-  // Contenu
-  void attributs(byte attribut);
-  void cursor(boolean etat);  // Curseur visible ou invisible
-  void bip();  // Bip sonore
-  void print(String chaine);
-  void println(String chaine);
-  void println();
-  void printChar(char caractere);  
-  void printDiacriticChar(char caractere);
-  void printSpecialChar(byte b);  
-  byte getCharByte(char caractere);
+Minitel(int rx, int tx, int vitesse);
+void clearScreen();
+void textMode();
+void graphicMode();  
+void specialMode();
+void attributs(byte attribut);
+void attributs(byte attribut1, byte attribut2);
+void cursor(boolean etat);
+void bip();
+void writeByte(byte b);
+void print(String chaine);
+void printChar(char caractere);  
+void printDiacriticChar(char caractere);
+void printSpecialChar(byte b);  
+byte getCharByte(char caractere);
+boolean isValidChar(byte index);
+boolean isDiacritic(char caractere);
+void gotoXY(byte x, byte y);
 
 
 Paramètres disponibles pour attributs(byte attribut)
@@ -116,8 +108,8 @@ DEGRE / PLUS_OU_MOINS / DIVISION
 UN_QUART / UN_DEMI / TROIS_QUART
 OE_MAJUSCULE / OE_MINUSCULE
 BETA
-
-*/
+                                          
+                                                                      */
 ////////////////////////////////////////////////////////////////////////
 
 
@@ -277,9 +269,23 @@ void demoCurseur() {
   minitel.textMode();
   for (int i=1; i<1000; i++) {
     minitel.gotoXY(1+random(40),3+random(22));
-    minitel.writeByte(0x20 + random(95));
+    minitel.writeByte(0x20 + random(0x60));
   }
+  
+  minitel.newScreen();
+  minitel.textMode();
   minitel.cursor(false);
+  for (int i=1; i<1000; i++) {
+    if (random(4)<3) { minitel.textMode(); }
+    else {
+      minitel.graphicMode();
+      minitel.attributs(DEBUT_LIGNAGE);
+    }
+    minitel.attributs(0x4C+random(5));
+    minitel.writeByte(0x20 + random(0x60));
+    minitel.attributs(FIN_LIGNAGE);
+  }
+  
 }
 
 ////////////////////////////////////////////////////////////////////////
