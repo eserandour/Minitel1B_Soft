@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 17 février 2016
+   Minitel1B - Fichier d'en-tête - Version du 19 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -45,9 +45,8 @@
 
 
 // 1.2.4 Codage des attributs de visualisation (voir p.91)
-// 1.2.4.2 Codage des attributs définis au niveau du caractère
 // Ces fonctions sont obtenues si précédées du code ESC (0x1B).
-// Nous avons alors accès à la grille C1. On peut y accéder directement 
+// Nous avons alors accès à la grille C1. On peut y accéder directement
 // en utilisant visualisation(byte attribut).
 // Couleur de caractère
 #define CARACTERE_NOIR    0x40
@@ -89,13 +88,12 @@
 
 
 // 1.2.5 Fonctions de mise en page (voir p.94)
-// 1.2.5.2 Fonctions disponibles :
 #define BS   0x08  // BackSpace : Déplacement du curseur d'un emplacement de caractère à gauche.
 #define HT   0x09  // Horizontal Tab : Déplacement du curseur d'un emplacement de caractère à droite.
 #define LF   0x0A  // Line Feed : Déplacement du curseur d'un emplacement de caractère vers le bas.
 #define VT   0x0B  // Vertical Tab : Déplacement du curseur d'un emplacement de caractère vers le haut.
 #define CR   0x0D  // Carriage Return : Retour du curseur au début de la rangée courante.
-// ...
+// Les fonctions de type CSI sont développées à l'intérieur de la classe Minitel (plus bas).
 #define RS   0x1E  // Record Separator : Retour du curseur en première position de la rangée 01. Ce code est un séparateur explicite d'article.
 #define FF   0x0C  // Form Feed : Retour du curseur en première position de la rangée 01 avec effacement complet de l'écran.
 #define US   0x1F  // Unit Separator : Séparateur de sous-article.
@@ -108,6 +106,8 @@
 #define SP   0x20  // Space :
 #define DEL  0x7F  // Delete :
 #define BEL  0x07  // Bell : Provoque l'émission d'un signal sonore
+// 1.2.6.2 Demande de position du curseur
+//...
 // 1.2.6.3 Fonctions d'extension de code
 #define SO   0x0E  // Shift Out : Accès au jeu G1. => Mode semi-graphique
 #define SI   0x0F  // Shift In : Accès au jeu G0.  => Mode alphanumérique
@@ -155,35 +155,52 @@ class Minitel : public SoftwareSerial
 public:
   Minitel(int rx, int tx, int vitesse);
   void writeByte(byte b);
-  // Mise en page
-  void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation
-  void newXY(byte x, byte y);  // Attention ! newXY réinitialise les attributs de visualisation
-  void gotoXY(byte x, byte y);  // Curseur en colonne x et rangée y.
+  // Séparateurs
+  void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
+  void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
+  // Curseur
+  void cursor();  // Curseur visible
+  void noCursor();  // Curseur invisible
+  void moveCursorXY(int x, int y);  // Curseur en colonne x et rangée y.
   void moveCursorLeft(int n);  // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
   void moveCursorRight(int n);  // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
   void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
   void moveCursorUp(int n);  // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
   void moveCursorReturn(int n);  // Retour du curseur au début de la rangée courante puis curseur vers le bas de n rangées. Arrêt en bas de l'écran.
+  // Effacements, Suppressions, Insertions
+  void cancel();  // Remplissage à partir de la position courante du curseur et jusqu'à la fin de la rangée par des espaces du jeu courant ayant l'état courant des attributs. Le position courante du curseur n'est pas déplacée.
+  void clearScreenFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de l'écran.
+  void clearScreenToCursor();  // Effacement depuis le début de l'écran jusqu'au curseur inclus.
+  void clearScreen();  // Effacement de tout l'écran (la position du curseur n'est pas modifiée).
+  void clearLineFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de la rangée.
+  void clearLineToCursor();  // Effacement depuis le début de la rangée jusqu'au curseur inclus.
+  void clearLine();  // Effacement total de la rangée où est le curseur.
+  void deleteChar(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
+  void insertChar(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
+  void startInsert();  // Début du mode insertion de caractères.
+  void stopInsert();  // Fin du mode insertion de caractères.
+  void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
+  void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
   // Modes
   void textMode();
   void graphicMode();  
   void specialMode();
   // Contenu
-  void attributs(byte attribut);
-  void cursor(boolean etat);  // Curseur visible ou invisible
-  void bip();  // Bip sonore
+  void attributs(byte attribut); 
   void print(String chaine);
   void println(String chaine);
   void println();
   void printChar(char caractere);  
   void printDiacriticChar(char caractere);
-  void printSpecialChar(byte b);  
+  void printSpecialChar(byte b);
+  void bip();  // Bip sonore 
   byte getCharByte(char caractere);
   
 private:
   byte currentSize = GRANDEUR_NORMALE;
   boolean isValidChar(byte index);
   boolean isDiacritic(char caractere);
+  void writeBytesP(int n);
 };
 
 ////////////////////////////////////////////////////////////////////////
