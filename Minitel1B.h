@@ -49,8 +49,8 @@
 // Jeu G0 => alphanumérique (voir p.100)
 // Jeu G1 => semi-graphique (voir p.101 et 102)
 // Jeu G2 => complément à G0 (voir p.103)
-// Ces caractères sont obtenus si précédées du code SS2 (0x19).
-// On peut les afficher directement en utilisant printSpecialChar(byte b).
+// Les caractères du jeu G2 sont obtenus si précédés du code SS2 (0x19).
+// On peut les afficher directement en utilisant printSpecialChar(byte b) :
 #define LIVRE              0x23
 #define DOLLAR             0x24
 #define DIESE              0x26
