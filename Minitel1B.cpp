@@ -242,7 +242,7 @@ void Minitel::deleteLines(int n) {  // Voir p.95
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::insertLines(int n) {  //Voir p.95
+void Minitel::insertLines(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeBytesP(n);  // Voir section Private ci-dessous    
   writeByte(0x4C);	
