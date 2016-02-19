@@ -135,7 +135,7 @@
 
 // 1.2.6 Autres fonctions (voir p.98)
 // 1.2.6.1 Fonctions diverses :
-#define REP  0x12  // Repetition : 
+#define REP  0x12  // Repetition : Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
 #define NUL  0x00  // Null :
 #define SP   0x20  // Space :
 #define DEL  0x7F  // Delete :
