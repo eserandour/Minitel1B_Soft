@@ -150,8 +150,12 @@
 // 1.2.6.4 Visualisation du curseur
 #define CON  0x11  // Visualisation de la position active du curseur (curseur actif).
 #define COFF 0x14  // Arrêt de la visualisation de la position active (curseur inactif).
+
+
 // 1.2.7 Filtages particuliers (voir p.99)
 //...
+
+
 // 1.2.8 Comportements en cas d'erreur et resynchronisation (voir p.99)
 // ...
 
