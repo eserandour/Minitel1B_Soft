@@ -43,6 +43,39 @@
 
 // Le standard Télétel
 
+// 1 Mode Vidéotex
+
+// 1.2.3 Codage des caractères visualisables
+// Jeu G0 => alphanumérique (voir p.100)
+// Jeu G1 => semi-graphique (voir p.101 et 102)
+// Jeu G2 => complément à G0 (voir p.103)
+// Ces caractères sont obtenus si précédées du code SS2 (0x19).
+// On peut les afficher directement en utilisant printSpecialChar(byte b).
+#define LIVRE              0x23
+#define DOLLAR             0x24
+#define DIESE              0x26
+#define PARAGRAPHE         0x27
+#define FLECHE_GAUCHE      0x2C
+#define FLECHE_HAUT        0x2D
+#define FLECHE_DROITE      0x2E
+#define FLECHE_BAS         0x2F
+#define DEGRE              0x30
+#define PLUS_OU_MOINS      0x31
+#define DIVISION           0x38
+#define UN_QUART           0x3C
+#define UN_DEMI            0x3D
+#define TROIS_QUART        0x3E
+#define OE_MAJUSCULE       0x6A
+#define OE_MINUSCULE       0x7A
+#define BETA               0x7B
+// Les diacritiques ne peuvent pas être affichés seuls.
+// printSpecialChar(byte b) n'aura donc aucun effet ici.
+#define ACCENT_GRAVE       0x41
+#define ACCENT_AIGU        0x42
+#define ACCENT_CIRCONFLEXE 0x43
+#define TREMA              0x48
+#define CEDILLE            0x4B
+
 
 // 1.2.4 Codage des attributs de visualisation (voir p.91)
 // Ces fonctions sont obtenues si précédées du code ESC (0x1B).
@@ -102,6 +135,7 @@
 
 // 1.2.6 Autres fonctions (voir p.98)
 // 1.2.6.1 Fonctions diverses :
+#define REP  0x12  // Repetition : 
 #define NUL  0x00  // Null :
 #define SP   0x20  // Space :
 #define DEL  0x7F  // Delete :
@@ -116,35 +150,13 @@
 // 1.2.6.4 Visualisation du curseur
 #define CON  0x11  // Visualisation de la position active du curseur (curseur actif).
 #define COFF 0x14  // Arrêt de la visualisation de la position active (curseur inactif).
+// 1.2.7 Filtages particuliers (voir p.99)
+//...
+// 1.2.8 Comportements en cas d'erreur et resynchronisation (voir p.99)
+// ...
 
 
-// Jeu G2 (voir p.103)
-// Ces caractères sont obtenus si précédées du code SS2 (0x19).
-// On peut les afficher directement en utilisant printSpecialChar(byte b).
-#define LIVRE              0x23
-#define DOLLAR             0x24
-#define DIESE              0x26
-#define PARAGRAPHE         0x27
-#define FLECHE_GAUCHE      0x2C
-#define FLECHE_HAUT        0x2D
-#define FLECHE_DROITE      0x2E
-#define FLECHE_BAS         0x2F
-#define DEGRE              0x30
-#define PLUS_OU_MOINS      0x31
-#define DIVISION           0x38
-#define UN_QUART           0x3C
-#define UN_DEMI            0x3D
-#define TROIS_QUART        0x3E
-#define OE_MAJUSCULE       0x6A
-#define OE_MINUSCULE       0x7A
-#define BETA               0x7B
-// Les diacritiques ne peuvent pas être affichés seuls.
-// printSpecialChar(byte b) n'aura donc aucun effet ici.
-#define ACCENT_GRAVE       0x41
-#define ACCENT_AIGU        0x42
-#define ACCENT_CIRCONFLEXE 0x43
-#define TREMA              0x48
-#define CEDILLE            0x4B
+
 
 
 
