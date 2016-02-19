@@ -3,13 +3,13 @@
    Minitel1B - Fichier source - Version du 19 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
-   
+
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
    http://543210.free.fr/TV/stum1b.pdf
-   
+
 ////////////////////////////////////////////////////////////////////////
-   
+
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; either version 2 of the License, or
@@ -83,7 +83,7 @@ void Minitel::newXY(int x, int y) {
     // aux colonnes 4 à 7, ils représentent respectivement (sous forme
     // binaire avec 6 bits utiles) le numéro de rangée et le numéro de
     // colonne du premier caractère du sous-article (voir p.96).
-    writeByte(US);        // 
+    writeByte(US);
     writeByte(0x40 + y);  // Numéro de rangée
     writeByte(0x40 + x);  // Numéro de colonne
   }
@@ -115,7 +115,7 @@ void Minitel::moveCursorLeft(int n) {  // Voir p.94 et 95
   else if (n>1) {
 	// Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
     attributs(CSI);   // 0x1B 0x5B
-    writeBytesP(n);   // Pn : Voir section Private ci-dessous  
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x44);
   }
 }
@@ -126,7 +126,7 @@ void Minitel::moveCursorRight(int n) {  // Voir p.94
   else if (n>1) {
 	// Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
     attributs(CSI);   // 0x1B 0x5B
-    writeBytesP(n);   // Pn : Voir section Private ci-dessous  
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x43);
   }
 }
@@ -137,7 +137,7 @@ void Minitel::moveCursorDown(int n) {  // Voir p.94
   else if (n>1) {
 	// Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
     attributs(CSI);   // 0x1B 0x5B
-    writeBytesP(n);   // Pn : Voir section Private ci-dessous   
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x42);
   }
 }
@@ -148,7 +148,7 @@ void Minitel::moveCursorUp(int n) {  // Voir p.94
   else if (n>1) {
 	// Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
     attributs(CSI);   // 0x1B 0x5B
-    writeBytesP(n);   // Pn : Voir section Private ci-dessous     
+    writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x41);
   }	
 }
@@ -168,21 +168,21 @@ void Minitel::cancel() {  // Voir p.95
 void Minitel::clearScreenFromCursor() {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   // writeByte(0x30);  Inutile
-  writeByte(0x4A);          
+  writeByte(0x4A);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::clearScreenToCursor() {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeByte(0x31);
-  writeByte(0x4A);    
+  writeByte(0x4A);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::clearScreen() {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeByte(0x32);
-  writeByte(0x4A);  
+  writeByte(0x4A);
 }
 /*--------------------------------------------------------------------*/
 
@@ -196,56 +196,56 @@ void Minitel::clearLineFromCursor() {  // Voir p.95
 void Minitel::clearLineToCursor() {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeByte(0x31);
-  writeByte(0x4B);	
+  writeByte(0x4B);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::clearLine() {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeByte(0x32);
-  writeByte(0x4B);	
+  writeByte(0x4B);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::deleteChars(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeBytesP(n);  // Voir section Private ci-dessous
-  writeByte(0x50);	
+  writeByte(0x50);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::insertChars(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
   writeBytesP(n);  // Voir section Private ci-dessous
-  writeByte(0x40);	
+  writeByte(0x40);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::startInsert() {  // Voir p.95
-  attributs(CSI);  // 0x1B 0x5B 
+  attributs(CSI);  // 0x1B 0x5B
   writeByte(0x34);
-  writeByte(0x68);	  
+  writeByte(0x68);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::stopInsert() {  // Voir p.95
-  attributs(CSI);  // 0x1B 0x5B 
+  attributs(CSI);  // 0x1B 0x5B
   writeByte(0x34);
-  writeByte(0x6C);	  
+  writeByte(0x6C);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::deleteLines(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
-  writeBytesP(n);  // Voir section Private ci-dessous    
-  writeByte(0x4D);	
+  writeBytesP(n);  // Voir section Private ci-dessous
+  writeByte(0x4D);
 }
 /*--------------------------------------------------------------------*/
 
 void Minitel::insertLines(int n) {  // Voir p.95
   attributs(CSI);  // 0x1B 0x5B
-  writeBytesP(n);  // Voir section Private ci-dessous    
-  writeByte(0x4C);	
+  writeBytesP(n);  // Voir section Private ci-dessous
+  writeByte(0x4C);
 }
 /*--------------------------------------------------------------------*/
 
@@ -279,11 +279,11 @@ void Minitel::attributs(byte attribut) {
 
 void Minitel::print(String chaine) {
   for (int i=0; i<chaine.length(); i++) {
-    char caractere = chaine.charAt(i);           
+    char caractere = chaine.charAt(i);
     if (!isDiacritic(caractere)) {
 	  printChar(caractere);
 	}
-	else {	  	  
+	else {
 	  i+=1;  // Un caractère accentué prend la place de 2 caractères
 	  caractere = chaine.charAt(i);
 	  printDiacriticChar(caractere);
@@ -321,7 +321,7 @@ void Minitel::printChar(char caractere) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::printDiacriticChar(char caractere) {		
+void Minitel::printDiacriticChar(char caractere) {
   specialMode();  // Accès au jeu G2 (voir p.103)
   String diacritics = "àâäèéêëîïôöùûüç";
   // Dans une chaine de caractères, un caractère diacritique prend la
@@ -333,7 +333,7 @@ void Minitel::printDiacriticChar(char caractere) {
     case( 1): car = 'a'; writeByte(ACCENT_CIRCONFLEXE); break;
     case( 2): car = 'a'; writeByte(TREMA); break;
     case( 3): car = 'e'; writeByte(ACCENT_GRAVE); break;
-    case( 4): car = 'e'; writeByte(ACCENT_AIGU); break;      
+    case( 4): car = 'e'; writeByte(ACCENT_AIGU); break;
     case( 5): car = 'e'; writeByte(ACCENT_CIRCONFLEXE); break;
     case( 6): car = 'e'; writeByte(TREMA); break;
     case( 7): car = 'i'; writeByte(ACCENT_CIRCONFLEXE); break;
@@ -356,7 +356,13 @@ void Minitel::printSpecialChar(byte b) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::bip() {
+void Minitel::repeat(int n) {  // Voir p.98
+  writeByte(REP);
+  writeByte(0x40 + n);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::bip() {  // Voir p.98
   writeByte(BEL);
 }
 /*--------------------------------------------------------------------*/
@@ -404,7 +410,7 @@ boolean Minitel::isDiacritic(char caractere) {
 void Minitel::writeBytesP(int n) {
   // Pn, Pr, Pc : Voir remarques p.95 et 96
   if (n<=9) {
-    writeByte(0x30 + n);     
+    writeByte(0x30 + n);
   }
   else {
     writeByte(0x30 + n/10);
