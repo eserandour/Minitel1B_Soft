@@ -198,9 +198,9 @@ public:
   void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
   void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
   // Modes
-  void textMode();
-  void graphicMode();  
-  void specialMode();
+  void textMode();     // Accès au jeu G0
+  void graphicMode();  // Accès au jeu G1
+  void specialMode();  // Accès au jeu G2
   // Contenu
   void attributs(byte attribut); 
   void print(String chaine);
@@ -217,7 +217,7 @@ private:
   byte currentSize = GRANDEUR_NORMALE;
   boolean isValidChar(byte index);
   boolean isDiacritic(char caractere);
-  void writeBytesP(int n);
+  void writeBytesP(int n);  // Pn, Pr, Pc
 };
 
 ////////////////////////////////////////////////////////////////////////
