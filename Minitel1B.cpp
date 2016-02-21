@@ -44,6 +44,7 @@ Minitel::Minitel(int rx, int tx, int vitesse) : SoftwareSerial(rx,tx) {
   // Fnct P + 3 : 300 bauds
   // Fnct P + 1 : 1200 bauds
   // Fnct P + 4 : 4800 bauds
+  // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
   begin(vitesse);
 }
 /*--------------------------------------------------------------------*/
