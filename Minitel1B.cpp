@@ -52,7 +52,7 @@ void Minitel::writeByte(byte b) {
   // Le bit de parité est mis à 0 si la somme des autres bits est paire
   // et à 1 si elle est impaire.
   boolean parite = 0;
-  for (int i=0; i<8; i++) {
+  for (int i=0; i<7; i++) {
     if (bitRead(b,i) == 1)  {
 	  parite = !parite;
 	}
@@ -64,6 +64,28 @@ void Minitel::writeByte(byte b) {
     bitWrite(b,7,0);  // Ecriture du bit de parité
   }
   write(b);  // Envoi de l'octet sur le port série logiciel
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::readByte() {
+  byte b = read();
+  // Le bit de parité est à 0 si la somme des autres bits est paire
+  // et à 1 si elle est impaire.	
+  boolean parite = 0;
+  for (int i=0; i<7; i++) {
+    if (bitRead(b,i) == 1)  {
+	  parite = !parite;
+	}
+  }
+  if (bitRead(b,7) == parite) {  // La transmission est bonne, on peut récupérer la donnée.
+	if (bitRead(b,7) == 1) {  // Cas où le bit de parité vaut 1.
+      b = b ^ 0b10000000;  // OU exclusif pour mettre le bit de parité à 0 afin de récupérer la donnée.
+    }
+    return b;
+  }
+  else {
+    return 0xFF;
+  }
 }
 /*--------------------------------------------------------------------*/
 
@@ -259,11 +281,6 @@ void Minitel::graphicMode() {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::specialMode() {
-  writeByte(SS2);  // Accès au jeu G2 (voir p.103 & 104)
-}
-/*--------------------------------------------------------------------*/
-
 void Minitel::attributs(byte attribut) {
   writeByte(ESC);  // Accès à la grille C1 (voir p.92)
   writeByte(attribut);
@@ -322,7 +339,7 @@ void Minitel::printChar(char caractere) {
 /*--------------------------------------------------------------------*/
 
 void Minitel::printDiacriticChar(char caractere) {
-  specialMode();  // Accès au jeu G2 (voir p.103)
+  writeByte(SS2);  // // Accès au jeu G2 (voir p.103)
   String diacritics = "àâäèéêëîïôöùûüç";
   // Dans une chaine de caractères, un caractère diacritique prend la
   // place de 2 caractères simples, ce qui explique le /2.
@@ -351,7 +368,7 @@ void Minitel::printDiacriticChar(char caractere) {
 
 void Minitel::printSpecialChar(byte b) {
   // N'est pas fonctionnelle pour les diacritiques (accents, tréma et cédille)
-  specialMode();  // Accès au jeu G2 (voir p.103)
+  writeByte(SS2);  // Accès au jeu G2 (voir p.103)
   writeByte(b);
 }
 /*--------------------------------------------------------------------*/
@@ -374,6 +391,29 @@ byte Minitel::getCharByte(char caractere) {
   // \\ donne à l'antislash sa signification littérale .
   String caracteres = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_xabcdefghijklmnopqrstuvwxyz";
   return (byte) caracteres.lastIndexOf(caractere);
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::changeSpeed(int bauds) {  // Voir p.141
+  // Format de la commande
+  writeBytesPRO2();  // 0x1B 0x3A
+  writeByte(PROG);   // 0x6B
+  switch (bauds) {
+    case  300 : writeByte(0b1010010); begin( 300); break;  // 0x52
+    case 1200 : writeByte(0b1100100); begin(1200); break;  // 0x64
+    case 4800 : writeByte(0b1110110); begin(4800); break;  // 0x76
+  }
+  // Acquittement 
+  return trameSpeed();  // En bauds (voir section Private ci-dessous)
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::currentSpeed() {
+  // Demande
+  writeBytesPRO1();
+  writeByte(STATUS_VITESSE);
+  // Réponse
+  return trameSpeed();  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
 
@@ -416,5 +456,43 @@ void Minitel::writeBytesP(int n) {
     writeByte(0x30 + n/10);
     writeByte(0x30 + n%10);
   }
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::writeBytesPRO1() {  // Voir p.134
+  writeByte(ESC);  // 0x1B
+  writeByte(0x39);	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::writeBytesPRO2() {  // Voir p.134
+  writeByte(ESC);  // 0x1B
+  writeByte(0x3A);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::writeBytesPRO3() {  // Voir p.134
+  writeByte(ESC);  // 0x1B
+  writeByte(0x3B);	
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::trameSpeed() {
+  int bauds = -1;
+  while (!isListening());   // On attend que le port soit bien sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets
+  int compteur = 0;
+  while (trame >> 8 != 0x1B3A75) {
+	if (available() > 0) {
+      trame = (trame << 8) + readByte();
+      //Serial.println(trame, HEX);
+    }
+  }
+  switch (trame) {
+    case 0x1B3A7552 : bauds =  300; break;
+    case 0x1B3A7564 : bauds = 1200; break;
+    case 0x1B3A7576 : bauds = 4800; break;
+  }
+  return bauds;	
 }
 /*--------------------------------------------------------------------*/
