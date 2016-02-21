@@ -162,6 +162,11 @@
 
 
 
+// 6 Le Protocole
+
+#define PROG                0x6B
+#define STATUS_VITESSE      0x74
+#define REP_STATUS_VITESSE  0x75
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -171,6 +176,7 @@ class Minitel : public SoftwareSerial
 public:
   Minitel(int rx, int tx, int vitesse);
   void writeByte(byte b);
+  byte readByte();
   // Séparateurs
   void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
   void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
@@ -200,7 +206,6 @@ public:
   // Modes
   void textMode();     // Accès au jeu G0
   void graphicMode();  // Accès au jeu G1
-  void specialMode();  // Accès au jeu G2
   // Contenu
   void attributs(byte attribut); 
   void print(String chaine);
@@ -212,12 +217,20 @@ public:
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
   byte getCharByte(char caractere);
-  
-private:
+  // Vitesse de la liaison série
+  int changeSpeed(int bauds);
+  int currentSpeed();
+
+private: 
   byte currentSize = GRANDEUR_NORMALE;
   boolean isValidChar(byte index);
   boolean isDiacritic(char caractere);
   void writeBytesP(int n);  // Pn, Pr, Pc
+  // Protocole
+  void writeBytesPRO1();  // PRO1
+  void writeBytesPRO2();  // PRO2
+  void writeBytesPRO3();  // PRO3
+  int trameSpeed();
 };
 
 ////////////////////////////////////////////////////////////////////////
