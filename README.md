@@ -6,14 +6,14 @@ http://543210.free.fr/TV/stum1b.pdf
 
 Démo en vidéo : http://serandour.com/minitel1b.htm
 
-<b>Dernières mises à jour de mise en page</b> :
+<b>Dernières mises à jour</b> :
 
 21/02/2016 - 3 nouvelles fonctions :<br>
 byte readByte()<br>
 int changeSpeed(int bauds)<br>
 int currentSpeed()<br>
 
-19/02/2016 - 13 nouvelles fonctions :<br>
+19/02/2016 - 13 nouvelles fonctions de mise en page :<br>
 void cancel()<br>
 void clearScreenFromCursor()<br>
 void clearScreenToCursor()<br>
