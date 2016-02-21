@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 21 février 2016
+   Minitel1B - Démo - Version du 21 février 2016 à 14 h 00
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -43,9 +43,26 @@ DIN 3 : TX   <-------->  Digital Pin 7 par exemple (RX)
 Fonctions disponibles
 ---------------------
 
-  Minitel(int rx, int tx, int vitesse);
+  Minitel(int rx, int tx);
+  
+  // Ecrire / Lire un octet
   void writeByte(byte b);
   byte readByte();
+  
+  // Vitesse de la liaison série
+  // A la mise sous tension du Minitel, la vitesse des échanges entre
+  // le Minitel et le périphérique est de 1200 bauds par défaut.
+  // L'usager du Minitel peut programmer au clavier la vitesse des
+  // échanges avec le périphérique quel que soit l'état du terminal
+  // grâce aux commandes suivantes :
+  // Fnct P + 3 : 300 bauds
+  // Fnct P + 1 : 1200 bauds
+  // Fnct P + 4 : 4800 bauds
+  // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
+  // Attention ! Si le Minitel et le périphérique ne communiquent pas
+  // à la même vitesse, on perd la liaison.
+  int changeSpeed(int bauds);
+  int currentSpeed();
   
   // Séparateurs
   void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
@@ -91,10 +108,7 @@ Fonctions disponibles
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
   byte getCharByte(char caractere);
-  
-  // Vitesse de la liaison série
-  int changeSpeed(int bauds);
-  int currentSpeed();
+
 
 Paramètres disponibles pour attributs(byte attribut)
 --------------------------------------------------------
