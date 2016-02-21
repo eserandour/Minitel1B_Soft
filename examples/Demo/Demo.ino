@@ -45,15 +45,16 @@ Fonctions disponibles
 
   Minitel(int rx, int tx, int vitesse);
   void writeByte(byte b);
+  byte readByte();
   
   // Séparateurs
   void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
   void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
-  
   // Curseur
+  
   void cursor();  // Curseur visible
   void noCursor();  // Curseur invisible
-  void moveCursorXY(int x, int y);  // Curseur en colonne x et rangée y.
+  void moveCursorXY(int x, int y);  // Adressage direct du curseur en colonne x et rangée y.
   void moveCursorLeft(int n);  // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
   void moveCursorRight(int n);  // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
   void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
@@ -68,29 +69,32 @@ Fonctions disponibles
   void clearLineFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de la rangée.
   void clearLineToCursor();  // Effacement depuis le début de la rangée jusqu'au curseur inclus.
   void clearLine();  // Effacement total de la rangée où est le curseur.
-  void deleteChar(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
-  void insertChar(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
+  void deleteChars(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
+  void insertChars(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
   void startInsert();  // Début du mode insertion de caractères.
   void stopInsert();  // Fin du mode insertion de caractères.
   void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
   void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
   
   // Modes
-  void textMode();
-  void graphicMode();  
-  void specialMode();
+  void textMode();     // Accès au jeu G0
+  void graphicMode();  // Accès au jeu G1
   
   // Contenu
   void attributs(byte attribut); 
   void print(String chaine);
   void println(String chaine);
   void println();
-  void printChar(char caractere);  
-  void printDiacriticChar(char caractere);
-  void printSpecialChar(byte b);
+  void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7B à 0x7F.
+  void printDiacriticChar(char caractere);  // Caractère avec accent, tréma ou cédille.  
+  void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
+  void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
   byte getCharByte(char caractere);
-
+  
+  // Vitesse de la liaison série
+  int changeSpeed(int bauds);
+  int currentSpeed();
 
 Paramètres disponibles pour attributs(byte attribut)
 --------------------------------------------------------
