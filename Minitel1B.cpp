@@ -35,7 +35,7 @@
 */
 ////////////////////////////////////////////////////////////////////////
 
-Minitel::Minitel(int rx, int tx, int vitesse) : SoftwareSerial(rx,tx) {
+Minitel::Minitel(int rx, int tx) : SoftwareSerial(rx,tx) {
   // A la mise sous tension du Minitel, la vitesse des échanges entre
   // le Minitel et le périphérique est de 1200 bauds par défaut.
   // L'usager du Minitel peut programmer la vitesse des échanges avec
@@ -45,7 +45,7 @@ Minitel::Minitel(int rx, int tx, int vitesse) : SoftwareSerial(rx,tx) {
   // Fnct P + 1 : 1200 bauds
   // Fnct P + 4 : 4800 bauds
   // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
-  begin(vitesse);
+  begin(1200);
 }
 /*--------------------------------------------------------------------*/
 
