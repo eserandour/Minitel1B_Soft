@@ -27,3 +27,5 @@ void startInsert()<br>
 void stopInsert()<br>
 void deleteLines(int n)<br>
 void insertLines(int n)<br>
+
+17/02/2016 - Début du projet sur GitHub<br>
