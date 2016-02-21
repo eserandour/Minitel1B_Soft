@@ -183,7 +183,7 @@ public:
   // Fnct P + 1 : 1200 bauds
   // Fnct P + 4 : 4800 bauds
   // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
-  Minitel(int rx, int tx, int vitesse);
+  Minitel(int rx, int tx);
   
   // Ecrire / Lire un octet
   void writeByte(byte b);
