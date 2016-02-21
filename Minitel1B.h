@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 21 février 2016 à 14 h 22
+   Minitel1B - Fichier d'en-tête - Version du 21 février 2016 à 14 h 25
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -192,7 +192,7 @@ public:
   // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
   // Attention ! Si le Minitel et le périphérique ne communiquent pas
   // à la même vitesse, on perd la liaison.
-  int changeSpeed(int bauds);  // A tout moment, un périphérique peut modifier les vitesses d'échange de la prise.
+  int changeSpeed(int bauds);  // A tout moment, un périphérique peut modifier les vitesses d'échange de la prise (vitesses possibles : 300, 1200, 4800 bauds ; également 9600 bauds pour le Minitel 2 ).
   int currentSpeed();  // Pour connaitre la vitesse d'échange en cours.
   
   // Séparateurs
