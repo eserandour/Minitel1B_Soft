@@ -481,7 +481,6 @@ int Minitel::trameSpeed() {
   int bauds = -1;
   while (!isListening());   // On attend que le port soit bien sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets
-  int compteur = 0;
   while (trame >> 8 != 0x1B3A75) {
 	if (available() > 0) {
       trame = (trame << 8) + readByte();
