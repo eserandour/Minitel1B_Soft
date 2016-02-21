@@ -160,17 +160,8 @@ BETA
 
 #include <Minitel1B.h>
 #include <SoftwareSerial.h>
-
-// A la mise sous tension du Minitel, la vitesse des échanges entre
-// le Minitel et le périphérique est de 1200 bauds par défaut.
-// L'usager du Minitel peut programmer la vitesse des échanges avec
-// le périphérique quel que soit l'état du terminal grâce aux
-// commandes suivantes :
-// Fnct P + 3 : 300 bauds
-// Fnct P + 1 : 1200 bauds
-// Fnct P + 4 : 4800 bauds
   
-Minitel minitel(7, 8, 1200);  // RX, TX, Vitesse en bauds
+Minitel minitel(7, 8);  // RX, TX
 
 int pause = 10000;
 
@@ -334,5 +325,3 @@ void demoCurseur() {
 }
 
 ////////////////////////////////////////////////////////////////////////
-  
- 
