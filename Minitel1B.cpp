@@ -402,13 +402,14 @@ int Minitel::changeSpeed(int bauds) {  // Voir p.141
     case  300 : writeByte(0b1010010); begin( 300); break;  // 0x52
     case 1200 : writeByte(0b1100100); begin(1200); break;  // 0x64
     case 4800 : writeByte(0b1110110); begin(4800); break;  // 0x76
+    case 9600 : writeByte(0b1111111); begin(9600); break;  // 0x7F (pour le Minitel 2 seulement)
   }
   // Acquittement 
   return trameSpeed();  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::currentSpeed() {
+int Minitel::currentSpeed() {  // Voir p.141
   // Demande
   writeBytesPRO1();
   writeByte(STATUS_VITESSE);
@@ -479,9 +480,9 @@ void Minitel::writeBytesPRO3() {  // Voir p.134
 
 int Minitel::trameSpeed() {
   int bauds = -1;
-  while (!isListening());   // On attend que le port soit bien sur écoute.
+  while (!isListening());   // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets
-  while (trame >> 8 != 0x1B3A75) {
+  while (trame >> 8 != 0x1B3A75) {  // Voir p.141
 	if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
@@ -491,6 +492,7 @@ int Minitel::trameSpeed() {
     case 0x1B3A7552 : bauds =  300; break;
     case 0x1B3A7564 : bauds = 1200; break;
     case 0x1B3A7576 : bauds = 4800; break;
+    case 0x1B3A757F : bauds = 9600; break;  // Pour le Minitel 2 seulement
   }
   return bauds;	
 }
