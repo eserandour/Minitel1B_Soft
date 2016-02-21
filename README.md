@@ -6,7 +6,7 @@ http://543210.free.fr/TV/stum1b.pdf
 
 Démo en vidéo : http://serandour.com/minitel1b.htm
 
-Dernières mises à jour :
+<u>Dernières mises à jour</u> :
 
 21/02/2016 - 3 nouvelles fonctions :<br>
 byte readByte()<br>
