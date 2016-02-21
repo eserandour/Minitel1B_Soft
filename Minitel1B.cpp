@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 21 février 2016
+   Minitel1B - Fichier source - Version du 21 février 2016 à 14 h 00
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -38,13 +38,6 @@
 Minitel::Minitel(int rx, int tx) : SoftwareSerial(rx,tx) {
   // A la mise sous tension du Minitel, la vitesse des échanges entre
   // le Minitel et le périphérique est de 1200 bauds par défaut.
-  // L'usager du Minitel peut programmer la vitesse des échanges avec
-  // le périphérique quel que soit l'état du terminal grâce aux
-  // commandes suivantes :
-  // Fnct P + 3 : 300 bauds
-  // Fnct P + 1 : 1200 bauds
-  // Fnct P + 4 : 4800 bauds
-  // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
   begin(1200);
 }
 /*--------------------------------------------------------------------*/
@@ -87,6 +80,30 @@ byte Minitel::readByte() {
   else {
     return 0xFF;
   }
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::changeSpeed(int bauds) {  // Voir p.141
+  // Format de la commande
+  writeBytesPRO2();  // 0x1B 0x3A
+  writeByte(PROG);   // 0x6B
+  switch (bauds) {
+    case  300 : writeByte(0b1010010); begin( 300); break;  // 0x52
+    case 1200 : writeByte(0b1100100); begin(1200); break;  // 0x64
+    case 4800 : writeByte(0b1110110); begin(4800); break;  // 0x76
+    case 9600 : writeByte(0b1111111); begin(9600); break;  // 0x7F (pour le Minitel 2 seulement)
+  }
+  // Acquittement 
+  return trameSpeed();  // En bauds (voir section Private ci-dessous)
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::currentSpeed() {  // Voir p.141
+  // Demande
+  writeBytesPRO1();
+  writeByte(STATUS_VITESSE);
+  // Réponse
+  return trameSpeed();  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
 
@@ -395,29 +412,7 @@ byte Minitel::getCharByte(char caractere) {
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::changeSpeed(int bauds) {  // Voir p.141
-  // Format de la commande
-  writeBytesPRO2();  // 0x1B 0x3A
-  writeByte(PROG);   // 0x6B
-  switch (bauds) {
-    case  300 : writeByte(0b1010010); begin( 300); break;  // 0x52
-    case 1200 : writeByte(0b1100100); begin(1200); break;  // 0x64
-    case 4800 : writeByte(0b1110110); begin(4800); break;  // 0x76
-    case 9600 : writeByte(0b1111111); begin(9600); break;  // 0x7F (pour le Minitel 2 seulement)
-  }
-  // Acquittement 
-  return trameSpeed();  // En bauds (voir section Private ci-dessous)
-}
-/*--------------------------------------------------------------------*/
 
-int Minitel::currentSpeed() {  // Voir p.141
-  // Demande
-  writeBytesPRO1();
-  writeByte(STATUS_VITESSE);
-  // Réponse
-  return trameSpeed();  // En bauds (voir section Private ci-dessous)
-}
-/*--------------------------------------------------------------------*/
 
 
 
