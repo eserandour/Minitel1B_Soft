@@ -174,12 +174,25 @@
 class Minitel : public SoftwareSerial
 {
 public:
+  // A la mise sous tension du Minitel, la vitesse des échanges entre
+  // le Minitel et le périphérique est de 1200 bauds par défaut.
+  // L'usager du Minitel peut programmer la vitesse des échanges avec
+  // le périphérique quel que soit l'état du terminal grâce aux
+  // commandes suivantes :
+  // Fnct P + 3 : 300 bauds
+  // Fnct P + 1 : 1200 bauds
+  // Fnct P + 4 : 4800 bauds
+  // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
   Minitel(int rx, int tx, int vitesse);
+  
+  // Ecrire / Lire un octet
   void writeByte(byte b);
   byte readByte();
+  
   // Séparateurs
   void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
   void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
+  
   // Curseur
   void cursor();  // Curseur visible
   void noCursor();  // Curseur invisible
@@ -189,6 +202,7 @@ public:
   void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
   void moveCursorUp(int n);  // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
   void moveCursorReturn(int n);  // Retour du curseur au début de la rangée courante puis curseur vers le bas de n rangées. Arrêt en bas de l'écran.
+  
   // Effacements, Suppressions, Insertions
   void cancel();  // Remplissage à partir de la position courante du curseur et jusqu'à la fin de la rangée par des espaces du jeu courant ayant l'état courant des attributs. Le position courante du curseur n'est pas déplacée.
   void clearScreenFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de l'écran.
@@ -203,9 +217,11 @@ public:
   void stopInsert();  // Fin du mode insertion de caractères.
   void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
   void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
+  
   // Modes
   void textMode();     // Accès au jeu G0
   void graphicMode();  // Accès au jeu G1
+  
   // Contenu
   void attributs(byte attribut); 
   void print(String chaine);
@@ -217,6 +233,7 @@ public:
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
   byte getCharByte(char caractere);
+  
   // Vitesse de la liaison série
   int changeSpeed(int bauds);
   int currentSpeed();
@@ -226,6 +243,7 @@ private:
   boolean isValidChar(byte index);
   boolean isDiacritic(char caractere);
   void writeBytesP(int n);  // Pn, Pr, Pc
+  
   // Protocole
   void writeBytesPRO1();  // PRO1
   void writeBytesPRO2();  // PRO2
