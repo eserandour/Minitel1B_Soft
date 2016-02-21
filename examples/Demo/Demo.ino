@@ -50,8 +50,8 @@ Fonctions disponibles
   // Séparateurs
   void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
   void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
-  // Curseur
   
+  // Curseur
   void cursor();  // Curseur visible
   void noCursor();  // Curseur invisible
   void moveCursorXY(int x, int y);  // Adressage direct du curseur en colonne x et rangée y.
