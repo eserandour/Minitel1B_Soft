@@ -8,22 +8,22 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 Dernières mises à jour :
 
-21/02/2016 - 3 nouvelles fonctions
-byte readByte()
-int changeSpeed(int bauds)
-int currentSpeed()
+21/02/2016 - 3 nouvelles fonctions<br>
+byte readByte()<br>
+int changeSpeed(int bauds)<br>
+int currentSpeed()<br>
 
-19/02/2016 - 13 nouvelles fonctions
-void cancel()
-void clearScreenFromCursor()
-void clearScreenToCursor()
-void clearScreen()
-void clearLineFromCursor()
-void clearLineToCursor()
-void clearLine()
-void deleteChars(int n)
-void insertChars(int n)
-void startInsert()
-void stopInsert()
-void deleteLines(int n)
-void insertLines(int n)
+19/02/2016 - 13 nouvelles fonctions<br>
+void cancel()<br>
+void clearScreenFromCursor()<br>
+void clearScreenToCursor()<br>
+void clearScreen()<br>
+void clearLineFromCursor()<br>
+void clearLineToCursor()<br>
+void clearLine()<br>
+void deleteChars(int n)<br>
+void insertChars(int n)<br>
+void startInsert()<br>
+void stopInsert()<br>
+void deleteLines(int n)<br>
+void insertLines(int n)<br>
