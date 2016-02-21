@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 19 février 2016
+   Minitel1B - Fichier source - Version du 21 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
