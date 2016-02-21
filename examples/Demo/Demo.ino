@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 19 février 2016
+   Minitel1B - Démo - Version du 21 février 2016
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -173,7 +173,7 @@ int pause = 10000;
 ////////////////////////////////////////////////////////////////////////
 
 void setup() {
-
+  Serial.begin(9600);  // Port série matériel de l'ATmega à 9600 bauds.
 }
 
 ////////////////////////////////////////////////////////////////////////
