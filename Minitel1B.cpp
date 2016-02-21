@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 21 février 2016 à 14 h 00
+   Minitel1B - Fichier source - Version du 21 février 2016 à 15 h 28
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -78,7 +78,7 @@ byte Minitel::readByte() {
     return b;
   }
   else {
-    return 0xFF;
+    return 0xFF;  // Pour indiquer une erreur de parité.
   }
 }
 /*--------------------------------------------------------------------*/
@@ -93,7 +93,7 @@ int Minitel::changeSpeed(int bauds) {  // Voir p.141
     case 4800 : writeByte(0b1110110); begin(4800); break;  // 0x76
     case 9600 : writeByte(0b1111111); begin(9600); break;  // 0x7F (pour le Minitel 2 seulement)
   }
-  // Acquittement 
+  // Acquittement
   return trameSpeed();  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
