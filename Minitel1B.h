@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 21 février 2016 (14 h)
+   Minitel1B - Fichier d'en-tête - Version du 21 février 2016 à 14 h 00
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
