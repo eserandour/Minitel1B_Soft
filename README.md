@@ -29,3 +29,5 @@ void deleteLines(int n)<br>
 void insertLines(int n)<br>
 
 17/02/2016 - Début du projet sur GitHub<br>
+
+02/02/2016 - Fabrication du câble
