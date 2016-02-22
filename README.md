@@ -8,7 +8,7 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
-22/02/2016 - 1 nouvelle fonction :<br>
+22/02/2016 - 1 nouvelle fonction géométrique :<br>
 void rect(int x1, int y1, int x2, int y2)<br>
 
 21/02/2016 - 3 nouvelles fonctions :<br>
