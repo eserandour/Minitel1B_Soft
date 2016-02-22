@@ -8,8 +8,10 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
-22/02/2016 - 1 nouvelle fonction géométrique :<br>
+22/02/2016 - 3 nouvelles fonctions géométriques :<br>
 void rect(int x1, int y1, int x2, int y2)<br>
+void hLine(int x1, int x2, int y, int position)<br>
+void vLine(int x, int y1, int y2, int position)<br>
 
 21/02/2016 - 3 nouvelles fonctions :<br>
 byte readByte()<br>
