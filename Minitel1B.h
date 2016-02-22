@@ -171,7 +171,7 @@
 
 
 
-// Définitions personnelles pour hline et vline
+// Constantes personnelles pour hline et vline
 #define CENTER  0
 #define TOP     1
 #define BOTTOM  2
