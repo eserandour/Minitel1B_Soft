@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 21 h 06
+   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 21 h 09
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -172,8 +172,8 @@
 
 
 // Définitions personnelles pour hline et vline
-#define TOP     0
-#define CENTER  1
+#define CENTER  0
+#define TOP     1
 #define BOTTOM  2
 #define LEFT    3
 #define RIGHT   4
