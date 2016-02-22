@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 21 février 2016 à 14 h 25
+   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 18 h 28
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -239,6 +239,9 @@ public:
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
   byte getCharByte(char caractere);
+  
+  // Géométrie
+  void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
