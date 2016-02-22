@@ -415,7 +415,7 @@ byte Minitel::getCharByte(char caractere) {
 void Minitel::rect(int x1, int y1, int x2, int y2) {
   hLine(x1,y1,x2,BOTTOM);
   vLine(x2,y1+1,y2,RIGHT,DOWN);
-  hLine(x1,y2,x2,TOP);  
+  hLine(x1,y2,x2,TOP);
   vLine(x1,y1,y2-1,LEFT,UP);
 }
 /*--------------------------------------------------------------------*/
@@ -438,7 +438,7 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 	case DOWN : moveCursorXY(x,y1); break;
     case UP   : moveCursorXY(x,y2); break;
   }
-  for (int i=0; i<y2-y1; i++) {   
+  for (int i=0; i<y2-y1; i++) {
     switch (position) {
       case LEFT   : writeByte(0x7B); break;
       case CENTER : writeByte(0x7C); break;
