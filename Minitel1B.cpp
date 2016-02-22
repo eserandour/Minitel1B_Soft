@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 22 février 2016 à 18 h 28
+   Minitel1B - Fichier source - Version du 22 février 2016 à 21 h 06
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -429,7 +429,32 @@ void Minitel::rect(int x1, int y1, int x2, int y2) {
 }
 /*--------------------------------------------------------------------*/
 
+void Minitel::hLine(int x1, int y, int x2, int position) {
+  textMode();
+  moveCursorXY(x1,y);
+  switch (position) {
+    case TOP    : writeByte(0x7E); break;
+    case CENTER : writeByte(0x60); break;
+    case BOTTOM : writeByte(0x5F); break;
+  }
+  repeat(x2-x1);
+}
+/*--------------------------------------------------------------------*/
 
+void Minitel::vLine(int x, int y1, int y2, int position) {
+  textMode();
+  moveCursorXY(x,y1);
+  for (int i=0; i<y2-y1; i++) {   
+    switch (position) {
+      case LEFT   : writeByte(0x7B); break;
+      case CENTER : writeByte(0x7C); break;
+      case RIGHT  : writeByte(0x7D); break;
+    }
+    moveCursorLeft(1); 
+    moveCursorDown(1); 
+  }	
+}
+/*--------------------------------------------------------------------*/
 
 
 
