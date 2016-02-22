@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 22 février 2016 à 21 h 06
+   Minitel1B - Fichier source - Version du 22 février 2016 à 22 h 17
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -413,19 +413,10 @@ byte Minitel::getCharByte(char caractere) {
 /*--------------------------------------------------------------------*/
 
 void Minitel::rect(int x1, int y1, int x2, int y2) {
-  textMode();
-  moveCursorXY(x1,y1);
-  writeByte(0x5F);
-  repeat(x2-x1);
-  for (int i=1; i<y2-y1; i++) {
-	 moveCursorXY(x1,y1+i);
-	 writeByte(0x7B);
-	 moveCursorXY(x2,y1+i);
-	 writeByte(0x7D);
-  }
-  moveCursorXY(x1,y2);
-  writeByte(0x7E);
-  repeat(x2-x1);
+  hLine(x1,y1,x2,BOTTOM);
+  vLine(x2,y1+1,y2,RIGHT,DOWN);
+  hLine(x1,y2,x2,TOP);  
+  vLine(x1,y1,y2-1,LEFT,UP);
 }
 /*--------------------------------------------------------------------*/
 
@@ -441,18 +432,23 @@ void Minitel::hLine(int x1, int y, int x2, int position) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::vLine(int x, int y1, int y2, int position) {
+void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
   textMode();
-  moveCursorXY(x,y1);
+  switch (sens) {
+	case DOWN : moveCursorXY(x,y1); break;
+    case UP   : moveCursorXY(x,y2); break;
+  }
   for (int i=0; i<y2-y1; i++) {   
     switch (position) {
       case LEFT   : writeByte(0x7B); break;
       case CENTER : writeByte(0x7C); break;
       case RIGHT  : writeByte(0x7D); break;
     }
-    moveCursorLeft(1); 
-    moveCursorDown(1); 
-  }	
+    switch (sens) {
+	  case DOWN : moveCursorLeft(1); moveCursorDown(1); break;
+      case UP   : moveCursorLeft(1); moveCursorUp(1); break;
+    }
+  }
 }
 /*--------------------------------------------------------------------*/
 
