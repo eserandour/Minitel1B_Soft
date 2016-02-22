@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 18 h 28
+   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 21 h 06
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -169,6 +169,16 @@
 #define REP_STATUS_VITESSE  0x75
 
 
+
+
+// Définitions personnelles pour hline et vline
+#define TOP     0
+#define CENTER  1
+#define BOTTOM  2
+#define LEFT    3
+#define RIGHT   4
+
+
 ////////////////////////////////////////////////////////////////////////
 
 class Minitel : public SoftwareSerial
@@ -242,6 +252,8 @@ public:
   
   // Géométrie
   void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
+  void hLine(int x1, int x2, int y, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
+  void vLine(int x, int y1, int y2, int position);  // Ligne verticale. position = LEFT, CENTER ou RIGHT.
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
