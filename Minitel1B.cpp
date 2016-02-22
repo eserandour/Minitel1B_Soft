@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 21 février 2016 à 15 h 28
+   Minitel1B - Fichier source - Version du 22 février 2016 à 18 h 28
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -412,6 +412,22 @@ byte Minitel::getCharByte(char caractere) {
 }
 /*--------------------------------------------------------------------*/
 
+void Minitel::rect(int x1, int y1, int x2, int y2) {
+  textMode();
+  moveCursorXY(x1,y1);
+  writeByte(0x5F);
+  repeat(x2-x1);
+  for (int i=1; i<y2-y1; i++) {
+	 moveCursorXY(x1,y1+i);
+	 writeByte(0x7B);
+	 moveCursorXY(x2,y1+i);
+	 writeByte(0x7D);
+  }
+  moveCursorXY(x1,y2);
+  writeByte(0x7E);
+  repeat(x2-x1);
+}
+/*--------------------------------------------------------------------*/
 
 
 
