@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 21 h 09
+   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 22 h 17
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -177,6 +177,9 @@
 #define BOTTOM  2
 #define LEFT    3
 #define RIGHT   4
+#define UP      5
+#define DOWN    6
+
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -253,7 +256,8 @@ public:
   // Géométrie
   void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
   void hLine(int x1, int x2, int y, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
-  void vLine(int x, int y1, int y2, int position);  // Ligne verticale. position = LEFT, CENTER ou RIGHT.
+  void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
+  
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
