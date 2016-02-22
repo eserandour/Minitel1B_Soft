@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 22 h 17
+   Minitel1B - Fichier d'en-tête - Version du 22 février 2016 à 22 h 24
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -255,7 +255,7 @@ public:
   
   // Géométrie
   void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
-  void hLine(int x1, int x2, int y, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
+  void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
   
 
