@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 3 mars 2016 à 22 h 11
+   Minitel1B - Fichier source - Version du 3 mars 2016 à 22 h 37
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -114,11 +114,7 @@ int Minitel::searchSpeed() {  // Voir p.141
   do {
     begin(SPEED[i]);
     if (i++ > 3) { i = 0; }
-    // Demande
-    writeBytesPRO1();
-    writeByte(STATUS_VITESSE);
-    // Réponse
-    speed = trameSpeed();
+    speed = currentSpeed();
   } while (speed < 0);
   return speed;  // En bauds (voir section Private ci-dessous)
 }
