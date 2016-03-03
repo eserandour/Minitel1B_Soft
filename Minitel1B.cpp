@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 3 mars 2016 à 22 h 44
+   Minitel1B - Fichier source - Version du 3 mars 2016 à 23 h 18
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -530,8 +530,8 @@ int Minitel::trameSpeed() {
   unsigned long time = millis();
   unsigned long duree = 0;
   unsigned long trame = 0;  // 32 bits = 4 octets
-  // On se donne 2000 ms pour récupérer une trame exploitable
-  while ((trame >> 8 != 0x1B3A75) && (duree < 2000)) {  // Voir p.141
+  // On se donne 1000 ms pour récupérer une trame exploitable
+  while ((trame >> 8 != 0x1B3A75) && (duree < 1000)) {  // Voir p.141
 	if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
