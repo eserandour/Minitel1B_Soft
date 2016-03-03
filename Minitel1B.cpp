@@ -107,7 +107,7 @@ int Minitel::currentSpeed() {  // Voir p.141
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::searchSpeed() {  // Voir p.141
+int Minitel::searchSpeed() {
   const int SPEED[4] = { 1200, 4800, 9600, 300 };
   int i = 0;
   int speed;
