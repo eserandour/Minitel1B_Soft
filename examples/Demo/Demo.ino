@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 21 février 2016 à 14 h 00
+   Minitel1B - Démo - Version du 3 mars 2016 à 22 h 11
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -61,8 +61,9 @@ Fonctions disponibles
   // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
   // Attention ! Si le Minitel et le périphérique ne communiquent pas
   // à la même vitesse, on perd la liaison.
-  int changeSpeed(int bauds);
-  int currentSpeed();
+  int changeSpeed(int bauds);  // A tout moment, un périphérique peut modifier les vitesses d'échange de la prise (vitesses possibles : 300, 1200, 4800 bauds ; également 9600 bauds pour le Minitel 2).
+  int currentSpeed();  // Pour connaitre la vitesse d'échange en cours, le Minitel et le périphérique échangeant à la même vitesse.
+  int searchSpeed();  // Pour connaitre la vitesse du Minitel, le Minitel et le périphérique n'échangeant pas nécessairement à la même vitesse.
   
   // Séparateurs
   void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
@@ -108,6 +109,11 @@ Fonctions disponibles
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
   byte getCharByte(char caractere);
+  
+  // Géométrie
+  void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
+  void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
+  void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
 
 
 Paramètres disponibles pour attributs(byte attribut)
@@ -183,6 +189,7 @@ int pause = 10000;
 
 void setup() {
   Serial.begin(9600);  // Port série matériel de l'ATmega à 9600 bauds.
+  minitel.changeSpeed(minitel.searchSpeed());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -335,7 +342,6 @@ void demoCurseur() {
     minitel.writeByte(0x20 + random(0x60));
     minitel.attributs(FIN_LIGNAGE);
   }
-  
 }
 
 ////////////////////////////////////////////////////////////////////////
