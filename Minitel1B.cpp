@@ -116,7 +116,7 @@ int Minitel::searchSpeed() {
     if (i++ > 3) { i = 0; }
     speed = currentSpeed();
   } while (speed < 0);
-  return speed;  // En bauds (voir section Private ci-dessous)
+  return speed;  // En bauds
 }
 /*--------------------------------------------------------------------*/
 
