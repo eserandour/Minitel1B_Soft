@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 3 mars 2016 à 23 h 18
+   Minitel1B - Fichier source - Version du 3 mars 2016 à 23 h 38
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -108,7 +108,7 @@ int Minitel::currentSpeed() {  // Voir p.141
 /*--------------------------------------------------------------------*/
 
 int Minitel::searchSpeed() {
-  const int SPEED[4] = { 1200, 4800, 9600, 300 };
+  const int SPEED[4] = { 1200, 4800, 300, 9600 };  // 9600 bauds pour le Minitel 2 seulement
   int i = 0;
   int speed;
   do {
