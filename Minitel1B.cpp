@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 22 février 2016 à 22 h 24
+   Minitel1B - Fichier source - Version du 3 mars 2016 à 22 h 11
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -104,6 +104,23 @@ int Minitel::currentSpeed() {  // Voir p.141
   writeByte(STATUS_VITESSE);
   // Réponse
   return trameSpeed();  // En bauds (voir section Private ci-dessous)
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::searchSpeed() {  // Voir p.141
+  const int SPEED[4] = { 1200, 4800, 9600, 300 };
+  int i = 0;
+  int speed;
+  do {
+    begin(SPEED[i]);
+    if (i++ > 3) { i = 0; }
+    // Demande
+    writeBytesPRO1();
+    writeByte(STATUS_VITESSE);
+    // Réponse
+    speed = trameSpeed();
+  } while (speed < 0);
+  return speed;  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
 
@@ -514,12 +531,15 @@ void Minitel::writeBytesPRO3() {  // Voir p.134
 int Minitel::trameSpeed() {
   int bauds = -1;
   while (!isListening());   // On attend que le port soit sur écoute.
+  unsigned long time = millis();
+  unsigned long duree = 0;
   unsigned long trame = 0;  // 32 bits = 4 octets
-  while (trame >> 8 != 0x1B3A75) {  // Voir p.141
+  while ((trame >> 8 != 0x1B3A75) && (duree < 2000)) {  // Voir p.141  
 	if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
     }
+    duree = millis() - time;
   }
   switch (trame) {
     case 0x1B3A7552 : bauds =  300; break;
