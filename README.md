@@ -8,7 +8,7 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
-03/03/2016 - 1 nouvelle fonction + 1 mise à jour
+03/03/2016 - 1 nouvelle fonction + 1 mise à jour<br>
 int searchSpeed();<br>
 int trameSpeed();<br>
 
