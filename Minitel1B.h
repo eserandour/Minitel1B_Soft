@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 18 h 35
+   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 22 h 12
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -166,7 +166,7 @@
 
 // Chapitre 3 : Le clavier
 
-// 6 Séquences émises par les touches de fonction en mode Vidéotex ou Mixte
+// 6 Séquences émises par les touches de fonction en mode Vidéotex ou Mixte (voir p.123)
 #define ENVOI         0x1341
 #define RETOUR        0x1342
 #define REPETITION    0x1343
@@ -278,7 +278,7 @@ public:
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
   
   // Clavier
-  unsigned long getKey();
+  unsigned long getKeyCode();
   
 
 private: 
