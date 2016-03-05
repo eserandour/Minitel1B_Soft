@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 5 mars 2016 à 22 h 53
+   Minitel1B - Fichier source - Version du 5 mars 2016 à 23 h 05
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -327,7 +327,7 @@ void Minitel::attributs(byte attribut) {
 
 void Minitel::print(String chaine) {
   for (int i=0; i<chaine.length(); i++) {
-    char caractere = chaine.charAt(i);
+    unsigned char caractere = chaine.charAt(i);
     if (!isDiacritic(caractere)) {
 	  printChar(caractere);
 	}
