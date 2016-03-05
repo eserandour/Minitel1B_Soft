@@ -8,8 +8,11 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+05/03/2016 -1 nouvelle fonction :<br>
+unsigned long getKey()<br>
+
 03/03/2016 - 1 nouvelle fonction :<br>
-int searchSpeed();<br>
+int searchSpeed()<br>
 
 22/02/2016 - 3 nouvelles fonctions géométriques :<br>
 void rect(int x1, int y1, int x2, int y2)<br>
