@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 3 mars 2016 à 22 h 11
+   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 18 h 35
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -42,6 +42,8 @@
 ////////////////////////////////////////////////////////////////////////
 
 // Le standard Télétel
+
+// Chapitre 2 : L'écran
 
 // 1 Mode Vidéotex
 
@@ -162,7 +164,23 @@
 
 
 
-// 6 Le Protocole
+// Chapitre 3 : Le clavier
+
+// 6 Séquences émises par les touches de fonction en mode Vidéotex ou Mixte
+#define ENVOI         0x1341
+#define RETOUR        0x1342
+#define REPETITION    0x1343
+#define GUIDE         0x1344
+#define ANNULATION    0x1345
+#define SOMMAIRE      0x1346
+#define CORRECTION    0x1347
+#define SUITE         0x1348
+#define CONNEXION_FIN 0x1359  // Non documenté
+
+
+
+
+// Chapitre 6 : Le Protocole
 
 #define PROG                0x6B
 #define STATUS_VITESSE      0x74
@@ -258,6 +276,9 @@ public:
   void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
   void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
+  
+  // Clavier
+  unsigned long getKey();
   
 
 private: 
