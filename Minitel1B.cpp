@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 3 mars 2016 à 23 h 38
+   Minitel1B - Fichier source - Version du 5 mars 2016 à 18 h 35
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -464,6 +464,82 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
   }
 }
 /*--------------------------------------------------------------------*/
+
+unsigned long Minitel::getKey() {
+  unsigned long code = 0;
+  if (available()>0) {
+    code = readByte();
+  }  
+  // Séquences de deux ou trois codes (voir p.118)
+  if (code == 0x19) {  // SS2
+    while (!available()>0);  // Indispensable
+    code = (code << 8) + readByte();
+    // Les diacritiques (3 codes)
+    if ((code == 0x1941) || (code == 0x1942) || (code == 0x1943) || (code == 0x1948) || (code == 0x194B)) {  // Accents, tréma, cédille
+	  while (!available()>0);  // Indispensable
+	  byte caractere = readByte();
+	  code = (code << 8) + caractere;
+	  switch (code) {  // On convertit le code reçu en un code que l'on peut visualiser sous forme d'un caractère dans le moniteur série du logiciel Arduino avec la fonction write().
+	    case 0x194161 : code = 0xE0; break;  // à 
+	    case 0x194165 : code = 0xE8; break;  // è
+	    case 0x194175 : code = 0xF9; break;  // ù
+	    case 0x194265 : code = 0xE9; break;  // é
+	    case 0x194361 : code = 0xE2; break;  // â
+	    case 0x194365 : code = 0xEA; break;  // ê
+	    case 0x194369 : code = 0xEE; break;  // î
+	    case 0x19436F : code = 0xF4; break;  // ô
+	    case 0x194375 : code = 0xFB; break;  // û
+	    case 0x194861 : code = 0xE4; break;  // ä
+	    case 0x194865 : code = 0xEB; break;  // ë
+	    case 0x194869 : code = 0xEF; break;  // ï
+	    case 0x19486F : code = 0xF6; break;  // ö
+	    case 0x194875 : code = 0xFC; break;  // ü
+	    case 0x194B63 : code = 0xE7; break;  // ç
+	    default : code = caractere; break;
+	  }
+	}
+	// Les autres caractères spéciaux disponibles (2 codes)
+	else {
+	  switch (code) {  // On convertit le code reçu en un code que l'on peut visualiser sous forme d'un caractère dans le moniteur série du logiciel Arduino avec la fonction write().
+	    case 0x1923 : code = 0xA3; break;  // Livre
+	    case 0x1927 : code = 0xA7; break;  // Paragraphe
+	    case 0x1930 : code = 0xB0; break;  // Degré
+	    case 0x1931 : code = 0xB1; break;  // Plus ou moins
+	    case 0x1938 : code = 0xF7; break;  // Division
+	    case 0x197B : code = 0xDF; break;  // Bêta
+	  }
+	}
+  }
+  // Touches de fonction (voir p.123)
+  else if (code == 0x13) {
+    while (!available()>0);  // Indispensable
+    code = (code << 8) + readByte();
+  }  
+  // Touches de gestion du curseur lorsque le clavier est en mode étendu (voir p.124)
+  // Pour passer au clavier étendu manuellement : Fnct C + E
+  // Pour revenir au clavier vidéotex standard  : Fnct C + V
+  else if (code == 0x1B) {
+	delay(1);  // Indispensable. 0x1B seul correspond à la touche Esc,
+	           // on ne peut donc pas utiliser la boucle while (!available()>0).
+    if (available()>0) {
+      code = (code << 8) + readByte();
+      while (!available()>0);  // Indispensable
+      code = (code << 8) + readByte();
+    }	  
+  }
+// Pour test
+/*
+  if (code != 0) {
+    Serial.print(code,HEX);
+    Serial.print(" ");
+    Serial.write(code);
+    Serial.println("");
+  }
+*/ 
+  return code;
+}
+/*--------------------------------------------------------------------*/
+
 
 
 
