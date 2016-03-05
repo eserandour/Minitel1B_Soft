@@ -9,7 +9,7 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 <b>Historique</b> :
 
 05/03/2016 - 1 nouvelle fonction :<br>
-unsigned long getKey()<br>
+unsigned long getKeyCode()<br>
 
 03/03/2016 - 1 nouvelle fonction :<br>
 int searchSpeed()<br>
