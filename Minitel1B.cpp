@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 5 mars 2016 à 18 h 35
+   Minitel1B - Fichier source - Version du 5 mars 2016 à 21 h 06
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -498,7 +498,7 @@ unsigned long Minitel::getKey() {
 	    default : code = caractere; break;
 	  }
 	}
-	// Les autres caractères spéciaux disponibles (2 codes)
+	// Les autres caractères spéciaux disponibles sous Arduino (2 codes)
 	else {
 	  switch (code) {  // On convertit le code reçu en un code que l'on peut visualiser sous forme d'un caractère dans le moniteur série du logiciel Arduino avec la fonction write().
 	    case 0x1923 : code = 0xA3; break;  // Livre
