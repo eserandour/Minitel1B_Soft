@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 5 mars 2016 à 22 h 12
+   Minitel1B - Fichier source - Version du 5 mars 2016 à 22 h 37
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -369,7 +369,7 @@ void Minitel::printChar(char caractere) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::printDiacriticChar(char caractere) {
+void Minitel::printDiacriticChar(unsigned char caractere) {
   writeByte(SS2);  // // Accès au jeu G2 (voir p.103)
   String diacritics = "àâäèéêëîïôöùûüç";
   // Dans une chaine de caractères, un caractère diacritique prend la
