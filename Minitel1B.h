@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 22 h 12
+   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 22 h 37
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -266,7 +266,7 @@ public:
   void println(String chaine);
   void println();
   void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7B à 0x7F.
-  void printDiacriticChar(char caractere);  // Caractère avec accent, tréma ou cédille.  
+  void printDiacriticChar(unsigned char caractere);  // Caractère avec accent, tréma ou cédille.  
   void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore 
