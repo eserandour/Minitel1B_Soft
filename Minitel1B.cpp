@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 5 mars 2016 à 21 h 06
+   Minitel1B - Fichier source - Version du 5 mars 2016 à 21 h 14
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -467,6 +467,7 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 
 unsigned long Minitel::getKey() {
   unsigned long code = 0;
+  // Code unique
   if (available()>0) {
     code = readByte();
   }  
