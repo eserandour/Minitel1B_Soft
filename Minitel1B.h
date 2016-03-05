@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 22 h 37
+   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 22 h 53
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -284,7 +284,7 @@ public:
 private: 
   byte currentSize = GRANDEUR_NORMALE;
   boolean isValidChar(byte index);
-  boolean isDiacritic(char caractere);
+  boolean isDiacritic(unsigned char caractere);
   void writeBytesP(int n);  // Pn, Pr, Pc
   
   // Protocole
