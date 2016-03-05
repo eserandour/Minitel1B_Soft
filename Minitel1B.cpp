@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 5 mars 2016 à 22 h 37
+   Minitel1B - Fichier source - Version du 5 mars 2016 à 22 h 53
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -562,7 +562,7 @@ boolean Minitel::isValidChar(byte index) {
 }
 /*--------------------------------------------------------------------*/
 
-boolean Minitel::isDiacritic(char caractere) {
+boolean Minitel::isDiacritic(unsigned char caractere) {
   String accents = "àâäèéêëîïôöùûüç";
   if (accents.indexOf(caractere) >= 0) {
     return true; 
