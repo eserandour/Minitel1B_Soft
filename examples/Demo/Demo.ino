@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 3 mars 2016 à 22 h 11
+   Minitel1B - Démo - Version du 5 mars 2016 à 22 h 15
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -38,82 +38,6 @@ DIN 5 :      <---//--->
 DIN 3 : TX   <-------->  Digital Pin 7 par exemple (RX)
 
 ////////////////////////////////////////////////////////////////////////
-
-
-Fonctions disponibles
----------------------
-
-  Minitel(int rx, int tx);
-  
-  // Ecrire / Lire un octet
-  void writeByte(byte b);
-  byte readByte();
-  
-  // Vitesse de la liaison série
-  // A la mise sous tension du Minitel, la vitesse des échanges entre
-  // le Minitel et le périphérique est de 1200 bauds par défaut.
-  // L'usager du Minitel peut programmer au clavier la vitesse des
-  // échanges avec le périphérique quel que soit l'état du terminal
-  // grâce aux commandes suivantes :
-  // Fnct P + 3 : 300 bauds
-  // Fnct P + 1 : 1200 bauds
-  // Fnct P + 4 : 4800 bauds
-  // Fnct P + 9 : 9600 bauds (pour le Minitel 2 seulement)
-  // Attention ! Si le Minitel et le périphérique ne communiquent pas
-  // à la même vitesse, on perd la liaison.
-  int changeSpeed(int bauds);  // A tout moment, un périphérique peut modifier les vitesses d'échange de la prise (vitesses possibles : 300, 1200, 4800 bauds ; également 9600 bauds pour le Minitel 2).
-  int currentSpeed();  // Pour connaitre la vitesse d'échange en cours, le Minitel et le périphérique échangeant à la même vitesse.
-  int searchSpeed();  // Pour connaitre la vitesse du Minitel, le Minitel et le périphérique n'échangeant pas nécessairement à la même vitesse.
-  
-  // Séparateurs
-  void newScreen();  // Attention ! newScreen réinitialise les attributs de visualisation.
-  void newXY(int x, int y);  // Attention ! newXY réinitialise les attributs de visualisation.
-  
-  // Curseur
-  void cursor();  // Curseur visible
-  void noCursor();  // Curseur invisible
-  void moveCursorXY(int x, int y);  // Adressage direct du curseur en colonne x et rangée y.
-  void moveCursorLeft(int n);  // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
-  void moveCursorRight(int n);  // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
-  void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
-  void moveCursorUp(int n);  // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
-  void moveCursorReturn(int n);  // Retour du curseur au début de la rangée courante puis curseur vers le bas de n rangées. Arrêt en bas de l'écran.
-  
-  // Effacements, Suppressions, Insertions
-  void cancel();  // Remplissage à partir de la position courante du curseur et jusqu'à la fin de la rangée par des espaces du jeu courant ayant l'état courant des attributs. Le position courante du curseur n'est pas déplacée.
-  void clearScreenFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de l'écran.
-  void clearScreenToCursor();  // Effacement depuis le début de l'écran jusqu'au curseur inclus.
-  void clearScreen();  // Effacement de tout l'écran (la position du curseur n'est pas modifiée).
-  void clearLineFromCursor();  // Effacement depuis le curseur inclus jusqu'à la fin de la rangée.
-  void clearLineToCursor();  // Effacement depuis le début de la rangée jusqu'au curseur inclus.
-  void clearLine();  // Effacement total de la rangée où est le curseur.
-  void deleteChars(int n);  // Suppression de n caractères en commençant à la position curseur incluse.
-  void insertChars(int n);  // Insertion de n caractères en commençant à la position curseur incluse (modèle RTIC uniquement, pas le MATRA ou le TELIC).
-  void startInsert();  // Début du mode insertion de caractères.
-  void stopInsert();  // Fin du mode insertion de caractères.
-  void deleteLines(int n);  // Suppression de n rangées à partir de celle où est le curseur.
-  void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
-  
-  // Modes
-  void textMode();     // Accès au jeu G0
-  void graphicMode();  // Accès au jeu G1
-  
-  // Contenu
-  void attributs(byte attribut); 
-  void print(String chaine);
-  void println(String chaine);
-  void println();
-  void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7B à 0x7F.
-  void printDiacriticChar(char caractere);  // Caractère avec accent, tréma ou cédille.  
-  void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
-  void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
-  void bip();  // Bip sonore 
-  byte getCharByte(char caractere);
-  
-  // Géométrie
-  void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
-  void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
-  void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
 
 
 Paramètres disponibles pour attributs(byte attribut)
