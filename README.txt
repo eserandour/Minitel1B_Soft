@@ -12,5 +12,5 @@ DIN 3 : TX    <----+--->  Digital Pin 7 par exemple (RX)
                    |
                   +5V
 
-La ligne TX nécessite une résistance R de rappel (pull-up). J'ai utilisé R = 10 kilohms.
+La ligne TX est à collecteur ouvert : elle nécessite donc une résistance R de rappel (pull-up). J'ai utilisé R = 10 kilohms.
 Je récupère le +5V par l'intermédiaire de la broche DIN 5 (+8,5V) sur laquelle je branche un régulateur 5V.
