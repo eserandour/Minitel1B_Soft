@@ -8,6 +8,9 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+06/03/2016 - Modification du câble<br>
+Ajout d'une résistance de tirage de 10 kohms sur la sortie TX du minitel.
+
 05/03/2016 - 1 nouvelle fonction :<br>
 unsigned long getKeyCode()<br>
 
