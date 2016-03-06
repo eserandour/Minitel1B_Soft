@@ -1,12 +1,12 @@
 Branchements :
 
-Dos du Minitel            Carte Arduino
+Dos du Minitel             Carte Arduino
 
-DIN 1 : RX    <-------->  Digital Pin 8 par exemple (TX)
-DIN 4 :       <---//--->
-DIN 2 : GND   <-------->  GND
-DIN 5 : +8,5V <---//--->
-DIN 3 : TX    <----+--->  Digital Pin 7 par exemple (RX)
+DIN 1 : RX    <--------->  Digital Pin 8 par exemple (TX)
+DIN 4 :       <---/ /--->
+DIN 2 : GND   <--------->  GND
+DIN 5 : +8,5V <---/ /--->
+DIN 3 : TX    <----+---->  Digital Pin 7 par exemple (RX)
                    |
                    R
                    |
