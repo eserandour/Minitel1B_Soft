@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 5 mars 2016 à 22 h 53
+   Minitel1B - Fichier d'en-tête - Version du 7 mars 2016 à 23 h 53
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -180,11 +180,23 @@
 
 
 
-// Chapitre 6 : Le Protocole
+// Chapitre 6 : Le Protocole (voir p.134)
+#define CODE_EMISSION_ECRAN     0x50
+#define CODE_EMISSION_CLAVIER   0x51
+#define CODE_EMISSION_MODEM     0x52
+#define CODE_EMISSION_PRISE     0x53
+#define CODE_RECEPTION_ECRAN    0x58
+#define CODE_RECEPTION_CLAVIER  0x59
+#define CODE_RECEPTION_MODEM    0x5A
+#define CODE_RECEPTION_PRISE    0x5B
 
-#define PROG                0x6B
-#define STATUS_VITESSE      0x74
-#define REP_STATUS_VITESSE  0x75
+#define PROG                    0x6B
+#define STATUS_VITESSE          0x74
+#define START                   0x69
+#define STOP                    0x6A
+#define ROULEAU                 0x43  // Ecran en mode rouleau
+#define MINUSCULES              0x45  // Clavier en mode minuscules
+#define ETEN                    0x41  // Clavier en mode étendu
 
 
 
@@ -259,6 +271,8 @@ public:
   // Modes
   void textMode();     // Accès au jeu G0
   void graphicMode();  // Accès au jeu G1
+  int pageMode();      // Mode page
+  int scrollMode();    // Mode rouleau
   
   // Contenu
   void attributs(byte attribut); 
@@ -279,7 +293,10 @@ public:
   
   // Clavier
   unsigned long getKeyCode();
-  
+  int smallMode();     // Mode minuscules du clavier
+  int capitalMode();   // Mode majuscules du clavier
+  int extendedKeyboard();  // Clavier étendu
+  int standardKeyboard();  // Clavier standard
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
@@ -291,7 +308,9 @@ private:
   void writeBytesPRO1();  // PRO1
   void writeBytesPRO2();  // PRO2
   void writeBytesPRO3();  // PRO3
-  int trameSpeed();
+  int workingSpeed();
+  int workingMode();
+  int workingKeyboard();
 };
 
 ////////////////////////////////////////////////////////////////////////
