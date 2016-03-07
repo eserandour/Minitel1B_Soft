@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 8 mars 2016 à 00 h 22
+   Minitel1B - Fichier source - Version du 8 mars 2016 à 00 h 26
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -704,7 +704,7 @@ int Minitel::workingKeyboard() {  // Voir p.142
   while (trame != 0x1B3B7359) {
     if (available() > 0) {
       trame = (trame << 8) + readByte();
-      Serial.println(trame, HEX);
+      //Serial.println(trame, HEX);
     }
   }
   while (!available()>0);  // Indispensable
