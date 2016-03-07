@@ -293,8 +293,8 @@ public:
   
   // Clavier
   unsigned long getKeyCode();
-  int smallMode();     // Mode minuscules du clavier
-  int capitalMode();   // Mode majuscules du clavier
+  int smallMode();  // Mode minuscules du clavier
+  int capitalMode();  // Mode majuscules du clavier
   int extendedKeyboard();  // Clavier étendu
   int standardKeyboard();  // Clavier standard
 
