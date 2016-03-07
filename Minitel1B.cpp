@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 5 mars 2016 à 23 h 05
+   Minitel1B - Fichier source - Version du 7 mars 2016 à 23 h 53
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -94,7 +94,7 @@ int Minitel::changeSpeed(int bauds) {  // Voir p.141
     case 9600 : writeByte(0b1111111); begin(9600); break;  // 0x7F (pour le Minitel 2 seulement)
   }
   // Acquittement
-  return trameSpeed();  // En bauds (voir section Private ci-dessous)
+  return workingSpeed();  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
 
@@ -103,7 +103,7 @@ int Minitel::currentSpeed() {  // Voir p.141
   writeBytesPRO1();
   writeByte(STATUS_VITESSE);
   // Réponse
-  return trameSpeed();  // En bauds (voir section Private ci-dessous)
+  return workingSpeed();  // En bauds (voir section Private ci-dessous)
 }
 /*--------------------------------------------------------------------*/
 
@@ -309,6 +309,26 @@ void Minitel::textMode() {
 
 void Minitel::graphicMode() {
   writeByte(SO);  // Accès au jeu G1 (voir p.101 & 102)
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::pageMode() {
+  // Commande
+  writeBytesPRO2();   // 0x1B 0x3A
+  writeByte(STOP);    // 0x6A
+  writeByte(ROULEAU); // 0x43
+  // Acquittement
+  return workingMode();
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::scrollMode() {
+  // Commande
+  writeBytesPRO2();   // 0x1B 0x3A
+  writeByte(START);   // 0x69
+  writeByte(ROULEAU); // 0x43
+  // Acquittement
+  return workingMode();
 }
 /*--------------------------------------------------------------------*/
 
@@ -541,7 +561,47 @@ unsigned long Minitel::getKeyCode() {
 }
 /*--------------------------------------------------------------------*/
 
+int Minitel::smallMode() {
+  // Commande
+  writeBytesPRO2();       // 0x1B 0x3A
+  writeByte(START);       // 0x69
+  writeByte(MINUSCULES);  // 0x45
+  // Acquittement
+  return workingMode();
+}
+/*--------------------------------------------------------------------*/
 
+int Minitel::capitalMode() {
+  // Commande
+  writeBytesPRO2();       // 0x1B 0x3A
+  writeByte(STOP);        // 0x6A
+  writeByte(MINUSCULES);  // 0x45
+  // Acquittement
+  return workingMode();
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::extendedKeyboard() {
+  // Commande
+  writeBytesPRO3();                   // 0x1B 0x3B
+  writeByte(START);                   // 0x69
+  writeByte(CODE_RECEPTION_CLAVIER);  // 0x59
+  writeByte(ETEN);                    // 0x41
+  // Acquittement
+  return workingKeyboard();	
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::standardKeyboard() {
+  // Commande
+  writeBytesPRO3();                   // 0x1B 0x3B
+  writeByte(STOP);                    // 0x6A
+  writeByte(CODE_RECEPTION_CLAVIER);  // 0x59
+  writeByte(ETEN);                    // 0x41
+  // Acquittement
+  return workingKeyboard();	
+}
+/*--------------------------------------------------------------------*/
 
 
 
@@ -601,7 +661,7 @@ void Minitel::writeBytesPRO3() {  // Voir p.134
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::trameSpeed() {
+int Minitel::workingSpeed() {
   int bauds = -1;
   while (!isListening());   // On attend que le port soit sur écoute.
   unsigned long time = millis();
@@ -622,5 +682,40 @@ int Minitel::trameSpeed() {
     case 0x1B3A757F : bauds = 9600; break;  // Pour le Minitel 2 seulement
   }
   return bauds;	
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::workingMode() {  // Voir p.143
+  // On récupère les 4 bits de poids faibles suivants : ME PC RL F
+  // ME : mode minuscules / majuscules du clavier (1 = minuscule)
+  // PC : PCE (1 = actif)
+  // RL : rouleau (1 = actif)
+  // F  : format d'écran (1 = 80 colonnes)
+  while (!isListening());   // On attend que le port soit sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets  
+  while (trame >> 8 != 0x1B3A73) {
+    if (available() > 0) {
+      trame = (trame << 8) + readByte();
+      //Serial.println(trame, HEX);
+    }
+  }
+  return trame & 0b1111;  // Masquage pour ne garder que les 4 derniers bits
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::workingKeyboard() {  // Voir p.142
+  // On récupère les 3 bits de poids faibles suivants : C0 0 Eten
+  // Eten : mode étendu (1 = actif)
+  // C0   : codage en jeu C0 des touches de gestion du curseur (1 = actif)
+  while (!isListening());   // On attend que le port soit sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets  
+  while (trame != 0x1B3B7359) {
+    if (available() > 0) {
+      trame = (trame << 8) + readByte();
+      Serial.println(trame, HEX);
+    }
+  }
+  while (!available()>0);  // Indispensable
+  return readByte() & 0b111;  // Masquage pour ne garder que les 3 derniers bits
 }
 /*--------------------------------------------------------------------*/
