@@ -8,6 +8,14 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+07/03/2016 - 6 nouvelles fonctions :<br>
+int pageMode()<br>
+int scrollMode()<br>
+int smallMode()<br>
+int capitalMode()<br>
+int extendedKeyboard()<br>
+int standardKeyboard()<br>
+
 06/03/2016 - Modification du câble :<br>
 Ajout d'une résistance de tirage de 10 kilohms sur la sortie TX du minitel.
 
