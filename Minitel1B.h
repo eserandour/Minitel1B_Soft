@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 7 mars 2016 à 23 h 53
+   Minitel1B - Fichier d'en-tête - Version du 8 mars 2016 à 00 h 22
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -167,15 +167,15 @@
 // Chapitre 3 : Le clavier
 
 // 6 Séquences émises par les touches de fonction en mode Vidéotex ou Mixte (voir p.123)
-#define ENVOI         0x1341
-#define RETOUR        0x1342
-#define REPETITION    0x1343
-#define GUIDE         0x1344
-#define ANNULATION    0x1345
-#define SOMMAIRE      0x1346
-#define CORRECTION    0x1347
-#define SUITE         0x1348
-#define CONNEXION_FIN 0x1359  // Non documenté
+#define ENVOI          0x1341
+#define RETOUR         0x1342
+#define REPETITION     0x1343
+#define GUIDE          0x1344
+#define ANNULATION     0x1345
+#define SOMMAIRE       0x1346
+#define CORRECTION     0x1347
+#define SUITE          0x1348
+#define CONNEXION_FIN  0x1359  // Non documenté
 
 
 
@@ -305,9 +305,7 @@ private:
   void writeBytesP(int n);  // Pn, Pr, Pc
   
   // Protocole
-  void writeBytesPRO1();  // PRO1
-  void writeBytesPRO2();  // PRO2
-  void writeBytesPRO3();  // PRO3
+  void writeBytesPRO(int n);  // PRO1, PRO2 ou PRO3
   int workingSpeed();
   int workingMode();
   int workingKeyboard();
