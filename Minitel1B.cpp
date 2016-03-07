@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 7 mars 2016 à 23 h 53
+   Minitel1B - Fichier source - Version du 8 mars 2016 à 00 h 22
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -85,7 +85,7 @@ byte Minitel::readByte() {
 
 int Minitel::changeSpeed(int bauds) {  // Voir p.141
   // Format de la commande
-  writeBytesPRO2();  // 0x1B 0x3A
+  writeBytesPRO(2);  // 0x1B 0x3A
   writeByte(PROG);   // 0x6B
   switch (bauds) {
     case  300 : writeByte(0b1010010); begin( 300); break;  // 0x52
@@ -100,7 +100,7 @@ int Minitel::changeSpeed(int bauds) {  // Voir p.141
 
 int Minitel::currentSpeed() {  // Voir p.141
   // Demande
-  writeBytesPRO1();
+  writeBytesPRO(1);
   writeByte(STATUS_VITESSE);
   // Réponse
   return workingSpeed();  // En bauds (voir section Private ci-dessous)
@@ -314,7 +314,7 @@ void Minitel::graphicMode() {
 
 int Minitel::pageMode() {
   // Commande
-  writeBytesPRO2();   // 0x1B 0x3A
+  writeBytesPRO(2);   // 0x1B 0x3A
   writeByte(STOP);    // 0x6A
   writeByte(ROULEAU); // 0x43
   // Acquittement
@@ -324,7 +324,7 @@ int Minitel::pageMode() {
 
 int Minitel::scrollMode() {
   // Commande
-  writeBytesPRO2();   // 0x1B 0x3A
+  writeBytesPRO(2);   // 0x1B 0x3A
   writeByte(START);   // 0x69
   writeByte(ROULEAU); // 0x43
   // Acquittement
@@ -563,7 +563,7 @@ unsigned long Minitel::getKeyCode() {
 
 int Minitel::smallMode() {
   // Commande
-  writeBytesPRO2();       // 0x1B 0x3A
+  writeBytesPRO(2);       // 0x1B 0x3A
   writeByte(START);       // 0x69
   writeByte(MINUSCULES);  // 0x45
   // Acquittement
@@ -573,7 +573,7 @@ int Minitel::smallMode() {
 
 int Minitel::capitalMode() {
   // Commande
-  writeBytesPRO2();       // 0x1B 0x3A
+  writeBytesPRO(2);       // 0x1B 0x3A
   writeByte(STOP);        // 0x6A
   writeByte(MINUSCULES);  // 0x45
   // Acquittement
@@ -583,7 +583,7 @@ int Minitel::capitalMode() {
 
 int Minitel::extendedKeyboard() {
   // Commande
-  writeBytesPRO3();                   // 0x1B 0x3B
+  writeBytesPRO(3);                   // 0x1B 0x3B
   writeByte(START);                   // 0x69
   writeByte(CODE_RECEPTION_CLAVIER);  // 0x59
   writeByte(ETEN);                    // 0x41
@@ -594,7 +594,7 @@ int Minitel::extendedKeyboard() {
 
 int Minitel::standardKeyboard() {
   // Commande
-  writeBytesPRO3();                   // 0x1B 0x3B
+  writeBytesPRO(3);                   // 0x1B 0x3B
   writeByte(STOP);                    // 0x6A
   writeByte(CODE_RECEPTION_CLAVIER);  // 0x59
   writeByte(ETEN);                    // 0x41
@@ -643,21 +643,13 @@ void Minitel::writeBytesP(int n) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::writeBytesPRO1() {  // Voir p.134
+void Minitel::writeBytesPRO(int n) {  // Voir p.134
   writeByte(ESC);  // 0x1B
-  writeByte(0x39);	
-}
-/*--------------------------------------------------------------------*/
-
-void Minitel::writeBytesPRO2() {  // Voir p.134
-  writeByte(ESC);  // 0x1B
-  writeByte(0x3A);
-}
-/*--------------------------------------------------------------------*/
-
-void Minitel::writeBytesPRO3() {  // Voir p.134
-  writeByte(ESC);  // 0x1B
-  writeByte(0x3B);	
+  switch (n) {
+    case 1 : writeByte(0x39); break;
+    case 2 : writeByte(0x3A); break;
+    case 3 : writeByte(0x3B); break;
+  }
 }
 /*--------------------------------------------------------------------*/
 
