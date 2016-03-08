@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier d'en-tête - Version du 8 mars 2016 à 00 h 22
+   Minitel1B - Fichier d'en-tête - Version du 8 mars 2016 à 09 h 02
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
    
@@ -307,8 +307,8 @@ private:
   // Protocole
   void writeBytesPRO(int n);  // PRO1, PRO2 ou PRO3
   int workingSpeed();
-  int workingMode();
-  int workingKeyboard();
+  byte workingMode();
+  byte workingKeyboard();
 };
 
 ////////////////////////////////////////////////////////////////////////
