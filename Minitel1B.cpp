@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 8 mars 2016 à 09 h 02
+   Minitel1B - Fichier source - Version du 8 mars 2016 à 09 h 06
    Copyright 2016 - Eric Sérandour
    http://bidouille.serandour.com
 
@@ -678,7 +678,7 @@ int Minitel::workingSpeed() {
 /*--------------------------------------------------------------------*/
 
 byte Minitel::workingMode() {  // Voir p.143
-  // On récupère les 4 bits de poids faibles suivants : ME PC RL F
+  // On récupère notamment les 4 bits de poids faibles suivants : ME PC RL F
   // ME : mode minuscules / majuscules du clavier (1 = minuscule)
   // PC : PCE (1 = actif)
   // RL : rouleau (1 = actif)
@@ -696,7 +696,7 @@ byte Minitel::workingMode() {  // Voir p.143
 /*--------------------------------------------------------------------*/
 
 byte Minitel::workingKeyboard() {  // Voir p.142
-  // On récupère les 3 bits de poids faibles suivants : C0 0 Eten
+  // On récupère notamment les 3 bits de poids faibles suivants : C0 0 Eten
   // Eten : mode étendu (1 = actif)
   // C0   : codage en jeu C0 des touches de gestion du curseur (1 = actif)
   while (!isListening());   // On attend que le port soit sur écoute.
