@@ -1,5 +1,5 @@
 # Minitel1B
-<b>Minitel Library for Arduino (SoftwareSerial)</b>
+<b>Minitel Library for Arduino (with SoftwareSerial)</b>
 
 Documentation utilisée : Spécifications Techniques d'Utilisation du Minitel 1B<br>
 http://543210.free.fr/TV/stum1b.pdf
