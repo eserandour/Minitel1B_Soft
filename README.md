@@ -8,6 +8,9 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+12/03/2016 - Nouvelle version de Minitel1B (sans SoftwareSerial) :<br>
+https://github.com/eserandour/Minitel1B_Hard<br>
+
 07/03/2016 - 6 nouvelles fonctions :<br>
 int pageMode()<br>
 int scrollMode()<br>
