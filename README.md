@@ -8,6 +8,8 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+14/10/2016 - La bibliothèque Minitel1B est renommée Minitel1B_Soft<br>
+
 12/03/2016 - Nouvelle version de Minitel1B (sans SoftwareSerial) :<br>
 https://github.com/eserandour/Minitel1B_Hard<br>
 
