@@ -1,4 +1,4 @@
-# Minitel1B
+# Minitel1B_Soft
 <b>Minitel Library for Arduino (with SoftwareSerial)</b>
 
 Documentation utilisée : Spécifications Techniques d'Utilisation du Minitel 1B<br>
