@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Démo - Version du 5 mars 2016 à 22 h 15
+   Minitel1B_Soft - Démo - Version du 14 octobre 2016 à 21 h 55
    Copyright 2016 - Eric Sérandour
-   http://bidouille.serandour.com
+   http://chaplab.info
    
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -90,7 +90,7 @@ BETA
 ////////////////////////////////////////////////////////////////////////
 
 
-#include <Minitel1B.h>
+#include <Minitel1B_Soft.h>
 #include <SoftwareSerial.h>
   
 Minitel minitel(7, 8);  // RX, TX
