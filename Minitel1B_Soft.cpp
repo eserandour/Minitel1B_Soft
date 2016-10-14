@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - Fichier source - Version du 8 mars 2016 à 09 h 06
+   Minitel1B_Soft - Fichier source - Version du 14 octobre à 21 h 55
    Copyright 2016 - Eric Sérandour
-   http://bidouille.serandour.com
+   http://chaplab.info
 
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -27,7 +27,7 @@
 */
 ////////////////////////////////////////////////////////////////////////
 
-#include "Minitel1B.h"
+#include "Minitel1B_Soft.h"
 
 ////////////////////////////////////////////////////////////////////////
 /*
