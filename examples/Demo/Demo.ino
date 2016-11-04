@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Démo - Version du 14 octobre 2016 à 21 h 55
+   Minitel1B_Soft - Démo - Version du 4 novembre 2016 à 20 h 52
    Copyright 2016 - Eric Sérandour
    http://chaplab.info
    
@@ -93,7 +93,7 @@ BETA
 #include <Minitel1B_Soft.h>
 #include <SoftwareSerial.h>
   
-Minitel minitel(7, 8);  // RX, TX
+Minitel minitel(9, 8);  // RX, TX
 
 int pause = 10000;
 
