@@ -2,7 +2,6 @@
 /*
    Minitel1B_Soft - Fichier d'en-tête - Version du 14 octobre à 21 h 55
    Copyright 2016 - Eric Sérandour
-   https://github.com/eserandour
    
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
