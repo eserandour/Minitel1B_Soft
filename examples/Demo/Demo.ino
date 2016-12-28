@@ -2,7 +2,6 @@
 /*
    Minitel1B_Soft - Démo - Version du 4 novembre 2016 à 20 h 52
    Copyright 2016 - Eric Sérandour
-   http://chaplab.info
    
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
