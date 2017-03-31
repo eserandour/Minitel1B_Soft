@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B - 3615 MORUE - Version du 3 novembre 2016 à 20 h 51
+   Minitel1B - 3615 MORUE - Version du 31 mars 2017 à 21h14
    Copyright 2016 - Eric Sérandour
    
    Documentation utilisée :
