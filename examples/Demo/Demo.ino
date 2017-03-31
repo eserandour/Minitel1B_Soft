@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Démo - Version du 4 novembre 2016 à 20 h 52
+   Minitel1B_Soft - Démo - Version du 31 mars 2017 à 21h14
    Copyright 2016 - Eric Sérandour
    
    Documentation utilisée :
@@ -92,7 +92,7 @@ BETA
 #include <Minitel1B_Soft.h>
 #include <SoftwareSerial.h>
   
-Minitel minitel(9, 8);  // RX, TX
+Minitel minitel(8, 9);  // RX, TX
 
 int pause = 10000;
 
