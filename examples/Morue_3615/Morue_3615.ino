@@ -33,7 +33,7 @@
 
 
   
-Minitel minitel(9, 8);  // RX, TX
+Minitel minitel(8, 9);  // RX, TX
 
 unsigned long touche;
 
