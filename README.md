@@ -8,6 +8,8 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+31/03/2017 - Modification de l'interfaçage : RX (D8) / TX (D9)
+
 04/11/2016 - Exemple d'utilisation du clavier (pour le muséosprint de Saint-Brieuc) : 3615 MORUE
 
 14/10/2016 - La bibliothèque Minitel1B est renommée Minitel1B_Soft<br>
