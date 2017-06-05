@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Démo - Version du 31 mars 2017 à 21h14
+   Minitel1B_Soft - Démo - Version du 5 juin 2017 à 23h44
    Copyright 2016 - Eric Sérandour
    
    Documentation utilisée :
@@ -107,6 +107,7 @@ void setup() {
 
 void loop() {
   demoCaracteres();
+  demoGraphic();
   demoTailles();
   demoCouleurs();
   demoCurseur();
@@ -165,6 +166,42 @@ void demoCaracteres() {
   minitel.moveCursorReturn(2);
     
   delay(pause); 
+}
+
+////////////////////////////////////////////////////////////////////////
+
+void demoGraphic() {
+  newPage("LA FONCTION GRAPHIC");
+  minitel.textMode();
+  minitel.println("Un caractère semi-graphique est composé de 6 pseudo-pixels :");
+  minitel.println();
+  minitel.graphicMode();
+  minitel.attributs(DEBUT_LIGNAGE);
+  minitel.writeByte(0x7F);
+  minitel.attributs(FIN_LIGNAGE);
+  minitel.textMode();
+  minitel.print(" avec lignage ou ");
+  minitel.graphicMode();
+  minitel.writeByte(0x7F);
+  minitel.textMode();
+  minitel.println(" sans lignage.");
+  minitel.println();
+  String chaine = "";
+  chaine += "minitel.graphic(\"101011\") donne ";
+  minitel.textMode();
+  minitel.print(chaine);
+  minitel.graphicMode();
+  minitel.graphic("101011");
+  minitel.textMode();
+  minitel.println();
+  minitel.println();
+  chaine = "";
+  chaine += "minitel.graphic(\"110110\",30,15) donne ";
+  minitel.print(chaine);  
+  minitel.graphicMode();
+  minitel.graphic("110110",30,15);
+  minitel.noCursor();
+  delay(2*pause); 
 }
 
 ////////////////////////////////////////////////////////////////////////
