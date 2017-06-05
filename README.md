@@ -8,6 +8,11 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
+05/06/2017 - 3 nouvelles fonctions graphiques :<br>
+graphic(String s, int x, int y)<br>
+void graphic(String s)<br>
+byte getGraphicByte(String s)<br>
+
 31/03/2017 - Modification de l'interfaçage : RX (D8) / TX (D9)
 
 04/11/2016 - Exemple d'utilisation du clavier (pour le muséosprint de Saint-Brieuc) : 3615 MORUE
