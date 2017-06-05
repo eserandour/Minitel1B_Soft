@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 5 juin 2017 à 20 h 34
+   Minitel1B_Soft - Fichier d'en-tête - Version du 5 juin 2017 à 21 h 56
    Copyright 2016, 2017 - Eric Sérandour
    
    Documentation utilisée :
@@ -281,19 +281,17 @@ public:
   void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7B à 0x7F.
   void printDiacriticChar(unsigned char caractere);  // Caractère avec accent, tréma ou cédille.  
   void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
-  void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
-  void bip();  // Bip sonore 
   byte getCharByte(char caractere);
+  void graphic(String s, int x, int y);  // Jeu G1. Voir page 101. Sous la forme "000000" à "111111" en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
+  void graphic(String s);  // Même chose que ci-dessus pour s.
+  byte getGraphicByte(String s);  // Même chose que ci-dessus pour s.
+  void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
+  void bip();  // Bip sonore
   
   // Géométrie
   void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
   void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
-  
-  // Graphisme
-  void graphic(String s, int x, int y);  // Jeu G1. Voir page 101. Sous la forme "000000" à "111111" en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
-  void graphic(String s);  // Même chose que ci-dessus pour s.
-  byte getGraphicByte(String s);  // Même chose que ci-dessus pour s.
 
   // Clavier
   unsigned long getKeyCode();
