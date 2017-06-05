@@ -501,14 +501,14 @@ byte Minitel::getGraphicByte(String s) {
     return NUL; 
   }
   else {
-    byte caract = 0x20;  // B0100000
-    caract += s[0] == '0' ? 0 : B0000001;
-	caract += s[1] == '0' ? 0 : B0000010;
-	caract += s[2] == '0' ? 0 : B0000100;
-	caract += s[3] == '0' ? 0 : B0001000;
-	caract += s[4] == '0' ? 0 : B0010000;
-	caract += s[5] == '0' ? 0 : B1000000;
-	if (caract == 0x7F) {
+    byte caract = 0x20;  // 0b0100000
+    caract += s[0] == '0' ? 0 : 0b0000001;
+	caract += s[1] == '0' ? 0 : 0b0000010;
+	caract += s[2] == '0' ? 0 : 0b0000100;
+	caract += s[3] == '0' ? 0 : 0b0001000;
+	caract += s[4] == '0' ? 0 : 0b0010000;
+	caract += s[5] == '0' ? 0 : 0b1000000;
+	if (caract == 0x7F) {  // 0b1111111
       caract = 0x5F;
 	}
 	return caract;
