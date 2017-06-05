@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 14 octobre à 21 h 55
-   Copyright 2016 - Eric Sérandour
+   Minitel1B_Soft - Fichier source - Version du 5 juin 2017 à 20 h 34
+   Copyright 2016, 2017 - Eric Sérandour
 
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -480,6 +480,38 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 	  case DOWN : moveCursorLeft(1); moveCursorDown(1); break;
       case UP   : moveCursorLeft(1); moveCursorUp(1); break;
     }
+  }
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::graphic(String s, int x, int y) {
+  moveCursorXY(x,y);
+  graphic(s);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::graphic(String s) {
+  writeByte(getGraphicByte(s));
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::getGraphicByte(String s) {
+  // Voir Jeu G1 page 101.
+  if (s.length() != 6) {
+    return NUL; 
+  }
+  else {
+    byte caract = 0x20;  // B0100000
+    caract += s[0] == '0' ? 0 : B0000001;
+	caract += s[1] == '0' ? 0 : B0000010;
+	caract += s[2] == '0' ? 0 : B0000100;
+	caract += s[3] == '0' ? 0 : B0001000;
+	caract += s[4] == '0' ? 0 : B0010000;
+	caract += s[5] == '0' ? 0 : B1000000;
+	if (caract == 0x7F) {
+      caract = 0x5F;
+	}
+	return caract;
   }
 }
 /*--------------------------------------------------------------------*/
