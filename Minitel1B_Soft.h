@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 14 octobre à 21 h 55
-   Copyright 2016 - Eric Sérandour
+   Minitel1B_Soft - Fichier d'en-tête - Version du 5 juin 2017 à 20 h 34
+   Copyright 2016, 2017 - Eric Sérandour
    
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -290,6 +290,11 @@ public:
   void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
   
+  // Graphisme
+  void graphic(String s, int x, int y);  // Jeu G1. Voir page 101. Sous la forme "000000" à "111111" en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
+  void graphic(String s);  // Même chose que ci-dessus pour s.
+  byte getGraphicByte(String s);  // Même chose que ci-dessus pour s.
+
   // Clavier
   unsigned long getKeyCode();
   int smallMode();  // Mode minuscules du clavier
