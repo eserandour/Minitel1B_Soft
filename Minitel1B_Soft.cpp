@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 5 juin 2017 à 20 h 34
+   Minitel1B_Soft - Fichier source - Version du 5 juin 2017 à 21 h 56
    Copyright 2016, 2017 - Eric Sérandour
 
    Documentation utilisée :
@@ -423,6 +423,48 @@ void Minitel::printSpecialChar(byte b) {
 }
 /*--------------------------------------------------------------------*/
 
+byte Minitel::getCharByte(char caractere) {
+  // Voir les codes et séquences émis en mode Vidéotex (Jeu G0 p.100).
+  // Dans la chaine ci-dessous, on utilise l'échappement (\) :
+  // \" rend au guillemet sa signification littérale.
+  // \\ donne à l'antislash sa signification littérale .
+  String caracteres = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_xabcdefghijklmnopqrstuvwxyz";
+  return (byte) caracteres.lastIndexOf(caractere);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::graphic(String s, int x, int y) {
+  moveCursorXY(x,y);
+  graphic(s);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::graphic(String s) {
+  writeByte(getGraphicByte(s));
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::getGraphicByte(String s) {
+  // Voir Jeu G1 page 101.
+  if (s.length() != 6) {
+    return NUL; 
+  }
+  else {
+    byte caract = 0x20;  // 0b0100000
+    caract += s[0] == '0' ? 0 : 0b0000001;
+	caract += s[1] == '0' ? 0 : 0b0000010;
+	caract += s[2] == '0' ? 0 : 0b0000100;
+	caract += s[3] == '0' ? 0 : 0b0001000;
+	caract += s[4] == '0' ? 0 : 0b0010000;
+	caract += s[5] == '0' ? 0 : 0b1000000;
+	if (caract == 0x7F) {  // 0b1111111
+      caract = 0x5F;
+	}
+	return caract;
+  }
+}
+/*--------------------------------------------------------------------*/
+
 void Minitel::repeat(int n) {  // Voir p.98
   writeByte(REP);
   writeByte(0x40 + n);
@@ -431,16 +473,6 @@ void Minitel::repeat(int n) {  // Voir p.98
 
 void Minitel::bip() {  // Voir p.98
   writeByte(BEL);
-}
-/*--------------------------------------------------------------------*/
-
-byte Minitel::getCharByte(char caractere) {
-  // Voir les codes et séquences émis en mode Vidéotex (Jeu G0 p.100).
-  // Dans la chaine ci-dessous, on utilise l'échappement (\) :
-  // \" rend au guillemet sa signification littérale.
-  // \\ donne à l'antislash sa signification littérale .
-  String caracteres = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_xabcdefghijklmnopqrstuvwxyz";
-  return (byte) caracteres.lastIndexOf(caractere);
 }
 /*--------------------------------------------------------------------*/
 
@@ -480,38 +512,6 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 	  case DOWN : moveCursorLeft(1); moveCursorDown(1); break;
       case UP   : moveCursorLeft(1); moveCursorUp(1); break;
     }
-  }
-}
-/*--------------------------------------------------------------------*/
-
-void Minitel::graphic(String s, int x, int y) {
-  moveCursorXY(x,y);
-  graphic(s);
-}
-/*--------------------------------------------------------------------*/
-
-void Minitel::graphic(String s) {
-  writeByte(getGraphicByte(s));
-}
-/*--------------------------------------------------------------------*/
-
-byte Minitel::getGraphicByte(String s) {
-  // Voir Jeu G1 page 101.
-  if (s.length() != 6) {
-    return NUL; 
-  }
-  else {
-    byte caract = 0x20;  // 0b0100000
-    caract += s[0] == '0' ? 0 : 0b0000001;
-	caract += s[1] == '0' ? 0 : 0b0000010;
-	caract += s[2] == '0' ? 0 : 0b0000100;
-	caract += s[3] == '0' ? 0 : 0b0001000;
-	caract += s[4] == '0' ? 0 : 0b0010000;
-	caract += s[5] == '0' ? 0 : 0b1000000;
-	if (caract == 0x7F) {  // 0b1111111
-      caract = 0x5F;
-	}
-	return caract;
   }
 }
 /*--------------------------------------------------------------------*/
