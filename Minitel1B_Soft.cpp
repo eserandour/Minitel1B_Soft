@@ -441,17 +441,19 @@ void Minitel::graphic(byte b, int x, int y) {
 
 void Minitel::graphic(byte b) {
   // Voir Jeu G1 page 101.
-  b = 0x20
-    + bitRead(b,5) 
-    + bitRead(b,4) * 2
-    + bitRead(b,3) * 4
-    + bitRead(b,2) * 8
-    + bitRead(b,1) * 16
-    + bitRead(b,0) * 64;
-  if (b == 0x7F) {  // 0b1111111
-     b= 0x5F;
-  }    
+  if (b <= 0b111111) {
+    b = 0x20
+      + bitRead(b,5) 
+      + bitRead(b,4) * 2
+      + bitRead(b,3) * 4
+      + bitRead(b,2) * 8
+      + bitRead(b,1) * 16
+      + bitRead(b,0) * 64;
+    if (b == 0x7F) {  // 0b1111111
+      b= 0x5F;
+    }    
   writeByte(b);
+  }
 }
 /*--------------------------------------------------------------------*/
 
