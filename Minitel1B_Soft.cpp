@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 5 juin 2017 à 21 h 56
+   Minitel1B_Soft - Fichier source - Version du 6 juin 2017 à 02 h 25
    Copyright 2016, 2017 - Eric Sérandour
 
    Documentation utilisée :
@@ -433,35 +433,25 @@ byte Minitel::getCharByte(char caractere) {
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::graphic(String s, int x, int y) {
+void Minitel::graphic(byte b, int x, int y) {
   moveCursorXY(x,y);
-  graphic(s);
+  graphic(b);
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::graphic(String s) {
-  writeByte(getGraphicByte(s));
-}
-/*--------------------------------------------------------------------*/
-
-byte Minitel::getGraphicByte(String s) {
+void Minitel::graphic(byte b) {
   // Voir Jeu G1 page 101.
-  if (s.length() != 6) {
-    return NUL; 
-  }
-  else {
-    byte caract = 0x20;  // 0b0100000
-    caract += s[0] == '0' ? 0 : 0b0000001;
-	caract += s[1] == '0' ? 0 : 0b0000010;
-	caract += s[2] == '0' ? 0 : 0b0000100;
-	caract += s[3] == '0' ? 0 : 0b0001000;
-	caract += s[4] == '0' ? 0 : 0b0010000;
-	caract += s[5] == '0' ? 0 : 0b1000000;
-	if (caract == 0x7F) {  // 0b1111111
-      caract = 0x5F;
-	}
-	return caract;
-  }
+  b = 0x20
+    + bitRead(b,5) 
+    + bitRead(b,4) * 2
+    + bitRead(b,3) * 4
+    + bitRead(b,2) * 8
+    + bitRead(b,1) * 16
+    + bitRead(b,0) * 64;
+  if (b == 0x7F) {  // 0b1111111
+     b= 0x5F;
+  }    
+  writeByte(b);
 }
 /*--------------------------------------------------------------------*/
 
