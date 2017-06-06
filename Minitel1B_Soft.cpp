@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 6 juin 2017 à 02 h 25
+   Minitel1B_Soft - Fichier source - Version du 6 juin 2017 à 14 h 36
    Copyright 2016, 2017 - Eric Sérandour
 
    Documentation utilisée :
