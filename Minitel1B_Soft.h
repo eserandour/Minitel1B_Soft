@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 5 juin 2017 à 21 h 56
+   Minitel1B_Soft - Fichier d'en-tête - Version du 6 juin 2017 à 02 h 25
    Copyright 2016, 2017 - Eric Sérandour
    
    Documentation utilisée :
@@ -281,10 +281,9 @@ public:
   void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7B à 0x7F.
   void printDiacriticChar(unsigned char caractere);  // Caractère avec accent, tréma ou cédille.  
   void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
-  byte getCharByte(char caractere);
-  void graphic(String s, int x, int y);  // Jeu G1. Voir page 101. Sous la forme "000000" à "111111" en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
-  void graphic(String s);  // Même chose que ci-dessus pour s.
-  byte getGraphicByte(String s);  // Même chose que ci-dessus pour s.
+  byte getCharByte(char caractere); 
+  void graphic(byte b, int x, int y);  // Jeu G1. Voir page 101. Sous la forme 0b000000 à 0b111111 en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
+  void graphic(byte b);  // Voir la ligne ci-dessus.
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
   void bip();  // Bip sonore
   
