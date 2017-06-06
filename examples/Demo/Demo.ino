@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Démo - Version du 5 juin 2017 à 23h44
+   Minitel1B_Soft - Démo - Version du 6 juin 2017 à 02 h 25
    Copyright 2016 - Eric Sérandour
    
    Documentation utilisée :
@@ -187,19 +187,19 @@ void demoGraphic() {
   minitel.println(" sans lignage.");
   minitel.println();
   String chaine = "";
-  chaine += "minitel.graphic(\"101011\") donne ";
+  chaine += "minitel.graphic(0b101011) donne ";
   minitel.textMode();
   minitel.print(chaine);
   minitel.graphicMode();
-  minitel.graphic("101011");
+  minitel.graphic(0b101011);
   minitel.textMode();
   minitel.println();
   minitel.println();
   chaine = "";
-  chaine += "minitel.graphic(\"110110\",30,15) donne ";
+  chaine += "minitel.graphic(0b110110,30,15) donne ";
   minitel.print(chaine);  
   minitel.graphicMode();
-  minitel.graphic("110110",30,15);
+  minitel.graphic(0b110110,30,15);
   minitel.noCursor();
   delay(2*pause); 
 }
