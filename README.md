@@ -8,10 +8,9 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
-05/06/2017 - 3 nouvelles fonctions graphiques :<br>
-void graphic(String s, int x, int y)<br>
-void graphic(String s)<br>
-byte getGraphicByte(String s)<br>
+06/06/2017 - 2 nouvelles fonctions graphiques :<br>
+void graphic(byte b, int x, int y)<br>
+void graphic(byte b)<br>
 
 31/03/2017 - Modification de l'interfaçage : RX (D8) / TX (D9)
 
