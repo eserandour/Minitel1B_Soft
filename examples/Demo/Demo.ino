@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Démo - Version du 6 juin 2017 à 02 h 25
+   Minitel1B_Soft - Démo - Version du 11 juin 2017 à 16 h 00
    Copyright 2016, 2017 - Eric Sérandour
    
    Documentation utilisée :
