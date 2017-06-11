@@ -2,6 +2,7 @@
 /*
    Minitel1B_Soft - Fichier source - Version du 11 juin 2017 à 16h00
    Copyright 2016, 2017 - Eric Sérandour
+   http://3615.entropie.org
 
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
