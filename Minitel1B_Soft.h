@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 11 juin 2017 à 16h00
+   Minitel1B_Soft - Fichier d'en-tête - Version du 15 juin 2017 à 20h48
    Copyright 2016, 2017 - Eric Sérandour
    http://3615.entropie.org
    
@@ -250,6 +250,8 @@ public:
   void moveCursorDown(int n);  // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
   void moveCursorUp(int n);  // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
   void moveCursorReturn(int n);  // Retour du curseur au début de la rangée courante puis curseur vers le bas de n rangées. Arrêt en bas de l'écran.
+  int getCursorX();  // Colonne où se trouve le curseur
+  int getCursorY();  // Rangée où se trouve le curseur
   
   // Effacements, Suppressions, Insertions
   void cancel();  // Remplissage à partir de la position courante du curseur et jusqu'à la fin de la rangée par des espaces du jeu courant ayant l'état courant des attributs. Le position courante du curseur n'est pas déplacée.
@@ -309,6 +311,8 @@ private:
   int workingSpeed();
   byte workingMode();
   byte workingKeyboard();
+  
+  unsigned long getCursorXY();
 };
 
 ////////////////////////////////////////////////////////////////////////
