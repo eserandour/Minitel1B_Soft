@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 15 juin 2017 à 20h48
+   Minitel1B_Soft - Fichier source - Version du 15 juin 2017 à 21h20
    Copyright 2016, 2017 - Eric Sérandour
    http://3615.entropie.org
 
