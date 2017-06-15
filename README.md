@@ -8,9 +8,9 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
-15/06/2017 - 2 nouvelles fonctions qui donnent la position du curseur : 
-int getCursorX()
-int getCursorY()
+15/06/2017 - 2 nouvelles fonctions qui donnent la position du curseur :<br>
+int getCursorX()<br>
+int getCursorY()<br>
 
 06/06/2017 - 2 nouvelles fonctions graphiques :<br>
 void graphic(byte b, int x, int y)<br>
