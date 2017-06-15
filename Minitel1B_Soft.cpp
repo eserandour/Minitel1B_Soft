@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 11 juin 2017 à 16h00
+   Minitel1B_Soft - Fichier source - Version du 15 juin 2017 à 20h48
    Copyright 2016, 2017 - Eric Sérandour
    http://3615.entropie.org
 
@@ -208,6 +208,20 @@ void Minitel::moveCursorUp(int n) {  // Voir p.94
 void Minitel::moveCursorReturn(int n) {  // Voir p.94
   writeByte(CR);
   moveCursorDown(n);  // Pour davantage de souplesse
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::getCursorX() {
+  unsigned long trame = getCursorXY();
+  int x = (trame & 0x0000FF) - 0x40;
+  return x;
+}
+/*--------------------------------------------------------------------*/
+
+int Minitel::getCursorY() {
+  unsigned long trame = getCursorXY();
+  int y = ((trame & 0x00FF00) >> 8) - 0x40;
+  return y;
 }
 /*--------------------------------------------------------------------*/
 
@@ -731,5 +745,21 @@ byte Minitel::workingKeyboard() {  // Voir p.142
   }
   while (!available()>0);  // Indispensable
   return readByte();
+}
+/*--------------------------------------------------------------------*/
+
+unsigned long Minitel::getCursorXY() {  // Voir p.98
+  // Demande
+  writeByte(ESC);
+  writeByte(0x61);
+  // Réponse
+  while (!mySerial);  // On attend que le port soit sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets  
+  while (trame >> 16 != US) {
+    if (mySerial.available() > 0) {
+      trame = (trame << 8) + readByte();
+    }
+  }
+  return trame;
 }
 /*--------------------------------------------------------------------*/
