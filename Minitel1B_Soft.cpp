@@ -212,16 +212,12 @@ void Minitel::moveCursorReturn(int n) {  // Voir p.94
 /*--------------------------------------------------------------------*/
 
 int Minitel::getCursorX() {
-  unsigned long trame = getCursorXY();
-  int x = (trame & 0x0000FF) - 0x40;
-  return x;
+  return (getCursorXY() & 0x0000FF) - 0x40;
 }
 /*--------------------------------------------------------------------*/
 
 int Minitel::getCursorY() {
-  unsigned long trame = getCursorXY();
-  int y = ((trame & 0x00FF00) >> 8) - 0x40;
-  return y;
+  return ((getCursorXY() & 0x00FF00) >> 8) - 0x40;
 }
 /*--------------------------------------------------------------------*/
 
