@@ -753,10 +753,10 @@ unsigned long Minitel::getCursorXY() {  // Voir p.98
   writeByte(ESC);
   writeByte(0x61);
   // Réponse
-  while (!mySerial);  // On attend que le port soit sur écoute.
+  while (!isListening());   // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets  
   while (trame >> 16 != US) {
-    if (mySerial.available() > 0) {
+    if (available() > 0) {
       trame = (trame << 8) + readByte();
     }
   }
