@@ -8,7 +8,7 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 
 <b>Historique</b> :
 
-18/06/2017 - Remplacement de l'exemple Morue_3615 par Tweet_3615
+18/06/2017 - Remplacement de l'exemple Morue_3615.ino par Tweet_3615.ino<br>
 
 15/06/2017 - 2 nouvelles fonctions qui donnent la position du curseur :<br>
 int getCursorX()<br>
