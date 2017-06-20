@@ -18,9 +18,9 @@ int getCursorY()<br>
 void graphic(byte b, int x, int y)<br>
 void graphic(byte b)<br>
 
-31/03/2017 - Modification de l'interfaçage : RX (D8) / TX (D9)
+31/03/2017 - Modification de l'interfaçage : RX (D8) / TX (D9)<br>
 
-04/11/2016 - Exemple d'utilisation du clavier (pour le muséosprint de Saint-Brieuc) : 3615 MORUE
+04/11/2016 - Exemple d'utilisation du clavier avec Morue_3615.ino<br>
 
 14/10/2016 - La bibliothèque Minitel1B est renommée Minitel1B_Soft<br>
 
