@@ -9,7 +9,7 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 <b>Historique</b> :
 
 28/06/2017 - Fichier Fritzing shield-3615.fzz (http://3615.entropie.org)<br>
-![alt text](http://entropie.org/3615/wp-content/uploads/2017/06/shield-3615-top-300x233a.png)
+
 
 18/06/2017 - Remplacement de l'exemple Morue_3615.ino par Tweet_3615.ino<br>
 
