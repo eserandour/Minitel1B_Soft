@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 15 juin 2017 à 22h11
-   Copyright 2016, 2017 - Eric Sérandour
+   Minitel1B_Soft - Fichier source - Version du 11 mai 2018 à 23h52
+   Copyright 2016, 2017, 2018 - Eric Sérandour
    http://3615.entropie.org
 
    Documentation utilisée :
@@ -398,8 +398,8 @@ void Minitel::printChar(char caractere) {
 /*--------------------------------------------------------------------*/
 
 void Minitel::printDiacriticChar(unsigned char caractere) {
-  writeByte(SS2);  // // Accès au jeu G2 (voir p.103)
-  String diacritics = "àâäèéêëîïôöùûüç";
+  writeByte(SS2);  // Accès au jeu G2 (voir p.103)
+  String diacritics = "àâäèéêëîïôöùûüçÀÂÄÈÉÊËÎÏÔÖÙÛÜÇ";
   // Dans une chaine de caractères, un caractère diacritique prend la
   // place de 2 caractères simples, ce qui explique le /2.
   int index = (diacritics.indexOf(caractere)-1)/2;
@@ -420,6 +420,23 @@ void Minitel::printDiacriticChar(unsigned char caractere) {
     case(12): car = 'u'; writeByte(ACCENT_CIRCONFLEXE); break;      
     case(13): car = 'u'; writeByte(TREMA); break;
     case(14): car = 'c'; writeByte(CEDILLE); break;
+    // Pour les cas où on essaye d'afficher un caractère diacritique majuscule,
+    // ce que ne peut pas faire le Minitel.
+    case(15): car = 'A'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(16): car = 'A'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(17): car = 'A'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(18): car = 'E'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(19): car = 'E'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(20): car = 'E'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(21): car = 'E'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(22): car = 'I'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(23): car = 'I'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(24): car = 'O'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(25): car = 'O'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(26): car = 'U'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(27): car = 'U'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(28): car = 'U'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
+    case(29): car = 'C'; writeByte(SI); break; // Accès au jeu G0 (voir p.100)
   }
   printChar(car);
 }
@@ -655,8 +672,8 @@ boolean Minitel::isValidChar(byte index) {
 /*--------------------------------------------------------------------*/
 
 boolean Minitel::isDiacritic(unsigned char caractere) {
-  String accents = "àâäèéêëîïôöùûüç";
-  if (accents.indexOf(caractere) >= 0) {
+  String diacritics = "àâäèéêëîïôöùûüçÀÂÄÈÉÊËÎÏÔÖÙÛÜÇ";
+  if (diacritics.indexOf(caractere) >= 0) {
     return true; 
   }
   return false;
