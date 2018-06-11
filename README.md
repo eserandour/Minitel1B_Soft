@@ -11,7 +11,7 @@ Démo en vidéo : http://serandour.com/minitel1b.htm
 11/05/2018 - Modification de deux fonctions :<br>
 void printDiacriticChar(unsigned char caractere)<br>
 boolean isDiacritic(unsigned char caractere)<br>
-pour tenir compte de la remarque de Boris sur les caractères diacritiques majuscules.
+pour tenir compte de la remarque de BorisFR sur les caractères diacritiques majuscules.
 
 28/06/2017 - Fichier Fritzing shield-3615.fzz (http://3615.entropie.org)<br>
 ![alt text](http://entropie.org/3615/wp-content/uploads/2017/06/shield-3615-top-300x233bis.png)
