@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 15 juin 2017 à 20h48
-   Copyright 2016, 2017 - Eric Sérandour
+   Minitel1B_Soft - Fichier d'en-tête - Version du 28 juin 2021 à 10h38
+   Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
    
    Documentation utilisée :
@@ -174,6 +174,21 @@
 #define CORRECTION     0x1347
 #define SUITE          0x1348
 #define CONNEXION_FIN  0x1359  // Non documenté
+
+// 7 Codes et séquences émis par les touches de gestion du curseur et d'édition en mode Vidéotex ou Mixte (voir p.124)
+#define TOUCHE_FLECHE_HAUT         0x1B5B41
+#define SUPPRESSION_LIGNE          0x1B5B4D
+#define TOUCHE_FLECHE_BAS          0x1B5B42
+#define INSERTION_LIGNE            0x1B5B4C
+#define TOUCHE_FLECHE_DROITE       0x1B5B43
+#define DEBUT_INSERTION_CARACTERE  0x1B5B3468
+#define FIN_INSERTION_CARACTERE    0x1B5B346C
+#define TOUCHE_FLECHE_GAUCHE       0x1B5B44
+#define SUPRESSION_CARACTERE       0x1B5B50
+// #define DEL                        0x7F  // Déjà défini plus haut (1.2.6.1)
+// #define CR                         0x0D  // Déjà défini plus haut (1.2.5)
+#define HOME                       0x1B5B4B
+#define EFFACEMENT_PAGE            0x1B5B324A
 
 
 
