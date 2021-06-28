@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 28 juin 2021 à 10h01
+   Minitel1B_Soft - Fichier source - Version du 28 juin 2021 à 17h40
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
 
@@ -537,16 +537,16 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 unsigned long Minitel::getKeyCode() {  // Code ASCII en général
   unsigned long code = 0;
   // Code unique
-  if (mySerial.available()>0) {
+  if (available()>0) {
     code = readByte();
   }
   // Séquences de deux ou trois codes (voir p.118)
   if (code == 0x19) {  // SS2
-    while (!mySerial.available()>0);  // Indispensable
+    while (!available()>0);  // Indispensable
     code = (code << 8) + readByte();
     // Les diacritiques (3 codes)
     if ((code == 0x1941) || (code == 0x1942) || (code == 0x1943) || (code == 0x1948) || (code == 0x194B)) {  // Accents, tréma, cédille
-    while (!mySerial.available()>0);  // Indispensable
+    while (!available()>0);  // Indispensable
     byte caractere = readByte();
     code = (code << 8) + caractere;
     switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
@@ -582,7 +582,7 @@ unsigned long Minitel::getKeyCode() {  // Code ASCII en général
   }
   // Touches de fonction (voir p.123)
   else if (code == 0x13) {
-    while (!mySerial.available()>0);  // Indispensable
+    while (!available()>0);  // Indispensable
     code = (code << 8) + readByte();
   }  
   // Touches de gestion du curseur lorsque le clavier est en mode étendu (voir p.124)
@@ -591,13 +591,13 @@ unsigned long Minitel::getKeyCode() {  // Code ASCII en général
   else if (code == 0x1B) {
     delay(20);  // Indispensable. 0x1B seul correspond à la touche Esc,
                 // on ne peut donc pas utiliser la boucle while (!available()>0).           
-    if (mySerial.available()>0) {
+    if (available()>0) {
       code = (code << 8) + readByte();
       if (code == 0x1B5B) {
-        while (!mySerial.available()>0);  // Indispensable
+        while (!available()>0);  // Indispensable
         code = (code << 8) + readByte();
         if ((code == 0x1B5B34) || (code == 0x1B5B32)) {
-          while (!mySerial.available()>0);  // Indispensable
+          while (!available()>0);  // Indispensable
           code = (code << 8) + readByte();
         }
       }
@@ -655,6 +655,20 @@ int Minitel::standardKeyboard() {
   writeByte(ETEN);                    // 0x41
   // Acquittement
   return workingKeyboard();	
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::echo(boolean commande) {
+  aiguillage(commande, CODE_EMISSION_CLAVIER, CODE_RECEPTION_ECRAN);
+}
+/*--------------------------------------------------------------------*/
+
+void Minitel::aiguillage(boolean commande, byte emetteur, byte recepteur) {  // Voir p.135
+  // Commande
+  writeBytesPRO(3);                                     // 0x1B 0x3B
+  writeByte(commande ? AIGUILLAGE_ON : AIGUILLAGE_OFF); // 0x61 ou 0x60
+  writeByte(recepteur);
+  writeByte(emetteur);
 }
 /*--------------------------------------------------------------------*/
 
