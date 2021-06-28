@@ -534,7 +534,7 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 }
 /*--------------------------------------------------------------------*/
 
-unsigned long Minitel::getKeyCode() {
+unsigned long Minitel::getKeyCode() {  // Code ASCII en général
   unsigned long code = 0;
   // Code unique
   if (mySerial.available()>0) {
