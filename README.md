@@ -6,6 +6,10 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
+28/06/2021 - Modification de la fonction :<br>
+unsigned long getKeyCode()<br>
+pour tenir compte des codes du clavier étendu.
+
 11/05/2018 - Modification de deux fonctions :<br>
 void printDiacriticChar(unsigned char caractere)<br>
 boolean isDiacritic(unsigned char caractere)<br>
