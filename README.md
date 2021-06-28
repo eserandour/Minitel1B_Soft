@@ -9,6 +9,7 @@ http://543210.free.fr/TV/stum1b.pdf
 28/06/2021 - Modification de la fonction :<br>
 unsigned long getKeyCode()<br>
 pour tenir compte des codes du clavier étendu.
+Dans le fichier d'entête (.h), ajout de plusieurs #define dans la partie "Clavier".
 
 11/05/2018 - Modification de deux fonctions :<br>
 void printDiacriticChar(unsigned char caractere)<br>
