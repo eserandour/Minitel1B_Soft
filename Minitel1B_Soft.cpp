@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 29 juin 2021 à 20h34
+   Minitel1B_Soft - Fichier source - Version du 29 juin 2021 à 23h03
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
 
@@ -352,15 +352,7 @@ int Minitel::modeMixte() {  // Voir p.144
   writeBytesPRO(2);   // 0x1B 0x3A
   writeWord(MIXTE1);  // 0x32 0x7D
   // Acquittement
-  while (!isListening());   // On attend que le port soit sur écoute.
-  unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame != 0x1370) {  // SEP (0x13), 0x70
-    if (available() > 0) {
-      trame = (trame << 8) + readByte();
-      //Serial.println(trame, HEX);
-    }
-  }
-  return 0;
+  return workingStandard(0x1370);  // SEP (0x13), 0x70
 }
 /*--------------------------------------------------------------------*/
 
@@ -370,15 +362,7 @@ int Minitel::modeVideotex() {  // Voir p.144
   writeBytesPRO(2);   // 0x1B 0x3A
   writeWord(MIXTE2);  // 0x32 0x7E
   // Acquittement
-  while (!isListening());   // On attend que le port soit sur écoute.
-  unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame != 0x1371) {  // SEP (0x13), 0x71
-    if (available() > 0) {
-      trame = (trame << 8) + readByte();
-      //Serial.println(trame, HEX);
-    }
-  }
-  return 0;
+  return workingStandard(0x1371);  // SEP (0x13), 0x71
 }
 /*--------------------------------------------------------------------*/
 
@@ -387,15 +371,7 @@ int Minitel::standardTeleinformatique() {  // Voir p.144
   writeBytesPRO(2);    // 0x1B 0x3A
   writeWord(TELINFO);  // 0x31 0x7D
   // Acquittement
-  while (!isListening());   // On attend que le port soit sur écoute.
-  unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame != 0x1B5B3F7A) {  // CSI (0x1B,0x5B), 0x3F, 0x7A
-    if (available() > 0) {
-      trame = (trame << 8) + readByte();
-      //Serial.println(trame, HEX);
-    }
-  }
-  return 0;
+  return workingStandard(0x1B5B3F7A);  // CSI (0x1B,0x5B), 0x3F, 0x7A
 }
 /*--------------------------------------------------------------------*/
 
@@ -405,15 +381,7 @@ int Minitel::standardTeletel() {  // Voir p.144
   writeByte(0x3F);
   writeByte(0x7B);
   // Acquittement
-  while (!isListening());   // On attend que le port soit sur écoute.
-  unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame != 0x135E) {  // SEP (0x13), 0x5E
-    if (available() > 0) {
-      trame = (trame << 8) + readByte();
-      //Serial.println(trame, HEX);
-    }
-  }
-  return 0;
+  return workingStandard(0x135E);  // SEP (0x13), 0x5E
 }
 /*--------------------------------------------------------------------*/
 
@@ -820,6 +788,19 @@ int Minitel::workingSpeed() {
     case 0x1B3A757F : bauds = 9600; break;  // Pour le Minitel 2 seulement
   }
   return bauds;	
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::workingStandard(unsigned long sequence) {
+  while (!isListening());   // On attend que le port soit sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets  
+  while (trame != sequence) {
+    if (available() > 0) {
+      trame = (trame << 8) + readByte();
+      //Serial.println(trame, HEX);
+    }
+  }
+  return 0;
 }
 /*--------------------------------------------------------------------*/
 
