@@ -6,6 +6,15 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
+29/06/2021 - 5 nouvelles fonctions :<br>
+void writeWord(word w)<br>
+int modeMixte()<br>
+int modeVideotex()<br>
+int standardTeleinformatique()<br>
+int standardTeletel()<br>
+Correction d'un bug sur la fonction :<br>
+void echo(boolean commande).
+
 28/06/2021 - Modification de la fonction :<br>
 unsigned long getKeyCode()<br>
 pour tenir compte des codes du clavier étendu.
