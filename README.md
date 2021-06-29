@@ -17,7 +17,7 @@ void echo(boolean commande).
 
 28/06/2021 - Modification de la fonction :<br>
 unsigned long getKeyCode()<br>
-pour tenir compte des codes du clavier étendu.
+pour tenir compte des codes du clavier étendu.<br>
 Dans le fichier d'entête (.h), ajout de plusieurs #define dans la partie "Clavier".<br>
 2 nouvelles fonctions :<br>
 void echo(boolean commande)<br>
