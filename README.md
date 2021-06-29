@@ -12,7 +12,7 @@ int modeMixte()<br>
 int modeVideotex()<br>
 int standardTeleinformatique()<br>
 int standardTeletel()<br>
-Correction d'un bug sur la fonction :<br>
+Correction d'un bug dans la fonction :<br>
 void echo(boolean commande).
 
 28/06/2021 - Modification de la fonction :<br>
