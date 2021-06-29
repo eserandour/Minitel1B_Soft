@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 29 juin 2021 à 20h34
+   Minitel1B_Soft - Fichier d'en-tête - Version du 29 juin 2021 à 23h03
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
    
@@ -354,6 +354,7 @@ private:
   // Protocole
   void writeBytesPRO(int n);  // PRO1, PRO2 ou PRO3
   int workingSpeed();
+  byte workingStandard(unsigned long sequence);
   byte workingMode();
   byte workingKeyboard();
   
