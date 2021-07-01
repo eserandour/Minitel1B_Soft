@@ -706,11 +706,15 @@ byte Minitel::standardKeyboard() {
 /*--------------------------------------------------------------------*/
 
 byte Minitel::echo(boolean commande) {  // Voir p.81 et p.156
+  // commande peut prendre comme valeur :
+  // true, false
   return aiguillage(commande, CODE_EMISSION_MODEM, CODE_RECEPTION_ECRAN);
 }
 /*--------------------------------------------------------------------*/
 
 byte Minitel::aiguillage(boolean commande, byte emetteur, byte recepteur) {  // Voir p.135
+  // commande peut prendre comme valeur :
+  // true, false
   // emetteur peut prendre comme valeur :
   // CODE_EMISSION_ECRAN, CODE_EMISSION_CLAVIER, CODE_EMISSION_MODEM, CODE_EMISSION_PRISE
   // recepteur peut prendre comme valeur :
