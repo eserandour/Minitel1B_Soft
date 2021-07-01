@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 29 juin 2021 à 23h03
+   Minitel1B_Soft - Fichier source - Version du 01 juillet 2021 à 22h03
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
 
@@ -326,27 +326,27 @@ void Minitel::graphicMode() {
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::pageMode() {
+byte Minitel::pageMode() {
   // Commande
-  writeBytesPRO(2);   // 0x1B 0x3A
-  writeByte(STOP);    // 0x6A
-  writeByte(ROULEAU); // 0x43
+  writeBytesPRO(2);    // 0x1B 0x3A
+  writeByte(STOP);     // 0x6A
+  writeByte(ROULEAU);  // 0x43
   // Acquittement
-  return workingMode();
+  return workingMode();  // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::scrollMode() {
+byte Minitel::scrollMode() {
   // Commande
-  writeBytesPRO(2);   // 0x1B 0x3A
-  writeByte(START);   // 0x69
-  writeByte(ROULEAU); // 0x43
+  writeBytesPRO(2);    // 0x1B 0x3A
+  writeByte(START);    // 0x69
+  writeByte(ROULEAU);  // 0x43
   // Acquittement
-  return workingMode();
+  return workingMode();  // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::modeMixte() {  // Voir p.144
+byte Minitel::modeMixte() {  // Voir p.144
   // Passage du standard Télétel mode Vidéotex au standard Télétel mode Mixte
   // Commande
   writeBytesPRO(2);   // 0x1B 0x3A
@@ -356,7 +356,7 @@ int Minitel::modeMixte() {  // Voir p.144
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::modeVideotex() {  // Voir p.144
+byte Minitel::modeVideotex() {  // Voir p.144
   // Passage du standard Télétel mode Mixte au standard Télétel mode Vidéotex
   // Commande
   writeBytesPRO(2);   // 0x1B 0x3A
@@ -366,8 +366,9 @@ int Minitel::modeVideotex() {  // Voir p.144
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::standardTeleinformatique() {  // Voir p.144
+byte Minitel::standardTeleinformatique() {  // Voir p.144
   // Passage du standard Télétel au standard Téléinformatique
+  // Commande
   writeBytesPRO(2);    // 0x1B 0x3A
   writeWord(TELINFO);  // 0x31 0x7D
   // Acquittement
@@ -375,8 +376,9 @@ int Minitel::standardTeleinformatique() {  // Voir p.144
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::standardTeletel() {  // Voir p.144
-  // Passage du standard Téléinformatique au standard Télétel 
+byte Minitel::standardTeletel() {  // Voir p.144
+  // Passage du standard Téléinformatique au standard Télétel
+  // Commande
   writeWord(CSI);  // 0x1B Ox5B
   writeByte(0x3F);
   writeByte(0x7B);
@@ -661,59 +663,71 @@ unsigned long Minitel::getKeyCode() {  // Code ASCII en général
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::smallMode() {
+byte Minitel::smallMode() {
   // Commande
   writeBytesPRO(2);       // 0x1B 0x3A
   writeByte(START);       // 0x69
   writeByte(MINUSCULES);  // 0x45
   // Acquittement
-  return workingMode();
+  return workingMode();   // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::capitalMode() {
+byte Minitel::capitalMode() {
   // Commande
   writeBytesPRO(2);       // 0x1B 0x3A
   writeByte(STOP);        // 0x6A
   writeByte(MINUSCULES);  // 0x45
   // Acquittement
-  return workingMode();
+  return workingMode();   // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::extendedKeyboard() {
+byte Minitel::extendedKeyboard() {
   // Commande
   writeBytesPRO(3);                   // 0x1B 0x3B
   writeByte(START);                   // 0x69
   writeByte(CODE_RECEPTION_CLAVIER);  // 0x59
   writeByte(ETEN);                    // 0x41
   // Acquittement
-  return workingKeyboard();	
+  return workingKeyboard();  // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
-int Minitel::standardKeyboard() {
+byte Minitel::standardKeyboard() {
   // Commande
   writeBytesPRO(3);                   // 0x1B 0x3B
   writeByte(STOP);                    // 0x6A
   writeByte(CODE_RECEPTION_CLAVIER);  // 0x59
   writeByte(ETEN);                    // 0x41
   // Acquittement
-  return workingKeyboard();	
+  return workingKeyboard();  // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::echo(boolean commande) {  // Voir p.81 et p.156
-  aiguillage(commande, CODE_EMISSION_MODEM, CODE_RECEPTION_ECRAN);
+byte Minitel::echo(boolean commande) {  // Voir p.81 et p.156
+  return aiguillage(commande, CODE_EMISSION_MODEM, CODE_RECEPTION_ECRAN);
 }
 /*--------------------------------------------------------------------*/
 
-void Minitel::aiguillage(boolean commande, byte emetteur, byte recepteur) {  // Voir p.135
+byte Minitel::aiguillage(boolean commande, byte emetteur, byte recepteur) {  // Voir p.135
   // Commande
   writeBytesPRO(3);                                     // 0x1B 0x3B
   writeByte(commande ? AIGUILLAGE_ON : AIGUILLAGE_OFF); // 0x61 ou 0x60
   writeByte(recepteur);
   writeByte(emetteur);
+  // Acquittement
+  return workingAiguillage(recepteur);  // Renvoie un octet
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::statutAiguillage(byte module) {  // Voir p. 136
+  // Commande
+  writeBytesPRO(2);  // 0x1B 0x3A
+  writeByte(TO);     // 0x62
+  writeByte(module);
+  // Acquittement
+  return workingAiguillage(module);  // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
@@ -836,6 +850,30 @@ byte Minitel::workingKeyboard() {  // Voir p.142
   }
   while (!available()>0);  // Indispensable
   return readByte();
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::workingAiguillage(byte module) {  // Voir p.136
+  // On récupère l'octet de statut d'aiguillage associé à un module :
+  // b7 : bit de parité
+  // b6 : 1
+  // b5 : 0
+  // b4 : 0
+  // b3 : prise
+  // b2 : modem             1 : liaison établie
+  // b1 : clavier           0 : liaison coupée
+  // b0 : écran
+  // L'octet de statut contient également l'état de la ressource que constitue le module lui-même (0 : module bloqué ; 1 : module actif)
+  while (!isListening());   // On attend que le port soit sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets
+  while (trame != (0x1B3B63 << 8 | module)) {  // PRO3 (0x1B,0x3B), FROM (0x63), code réception ou émission du module
+    if (available() > 0) {
+      trame = (trame << 8) + readByte();
+      //Serial.println(trame, HEX);
+    }
+  }
+  while (!available()>0);  // Indispensable
+  return readByte(); // Octet de statut associé à un module
 }
 /*--------------------------------------------------------------------*/
 
