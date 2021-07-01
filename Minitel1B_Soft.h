@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 29 juin 2021 à 23h03
+   Minitel1B_Soft - Fichier d'en-tête - Version du 01 juillet 2021 à 22h03
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
    
@@ -209,6 +209,9 @@
 // 3.2 Format des commandes (voir p.135)
 #define AIGUILLAGE_OFF             0x60
 #define AIGUILLAGE_ON              0x61
+// 3.4 Demande de statut d'aiguillages des modules
+#define TO                         0x62
+#define FROM                       0x63
 
 // 8 Commandes relatives à la prise (voir p.141)
 #define PROG                       0x6B
@@ -304,16 +307,16 @@ public:
   void insertLines(int n);  // Insertion de n rangées à partir de celle où est le curseur.
   
   // Modes du standard Télétel
-  void textMode();     // Accès au jeu G0 - Mode Vidéotex 40 colonnes (par défaut à la mise sous tension du Minitel)
-  void graphicMode();  // Accès au jeu G1 - Mode Vidéotex 40 colonnes
-  int pageMode();      // Mode page
-  int scrollMode();    // Mode rouleau
-  int modeMixte();     // Mode Vidéotex => Mode Mixte 80 colonnes (Aucun caractère semi-graphique (jeu G1) n'est visualisable)
-  int modeVideotex();  // Mode Mixte => Mode Vidéotex 40 colonnes
+  void textMode();      // Accès au jeu G0 - Mode Vidéotex 40 colonnes (par défaut à la mise sous tension du Minitel)
+  void graphicMode();   // Accès au jeu G1 - Mode Vidéotex 40 colonnes
+  byte pageMode();      // Mode page
+  byte scrollMode();    // Mode rouleau
+  byte modeMixte();     // Mode Vidéotex => Mode Mixte 80 colonnes (Aucun caractère semi-graphique (jeu G1) n'est visualisable)
+  byte modeVideotex();  // Mode Mixte => Mode Vidéotex 40 colonnes
 
   // Standards
-  int standardTeleinformatique();  // Standard Télétel => Standard Téléinformatique 80 colonnes (Possibilités de programmation moins étendues)
-  int standardTeletel();           // Standard Téléinformatique => Standard Télétel (inclut les modes Vidéotex et Mixte)
+  byte standardTeleinformatique();  // Standard Télétel => Standard Téléinformatique 80 colonnes (Possibilités de programmation moins étendues)
+  byte standardTeletel();           // Standard Téléinformatique => Standard Télétel (inclut les modes Vidéotex et Mixte)
   
   // Contenu
   void attributs(byte attribut); 
@@ -336,14 +339,15 @@ public:
 
   // Clavier
   unsigned long getKeyCode();
-  int smallMode();  // Mode minuscules du clavier
-  int capitalMode();  // Mode majuscules du clavier
-  int extendedKeyboard();  // Clavier étendu
-  int standardKeyboard();  // Clavier standard
-  void echo(boolean commande);  // Active ou désactive l'écho à l'écran de ce qui est tapé au clavier
+  byte smallMode();  // Mode minuscules du clavier
+  byte capitalMode();  // Mode majuscules du clavier
+  byte extendedKeyboard();  // Clavier étendu
+  byte standardKeyboard();  // Clavier standard
+  byte echo(boolean commande);  // Active ou désactive l'écho à l'écran de ce qui est tapé au clavier
   
   // Protocole
-  void aiguillage(boolean commande, byte emetteur, byte recepteur);
+  byte aiguillage(boolean commande, byte emetteur, byte recepteur);
+  byte statutAiguillage(byte module);
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
@@ -357,6 +361,7 @@ private:
   byte workingStandard(unsigned long sequence);
   byte workingMode();
   byte workingKeyboard();
+  byte workingAiguillage(byte module);
   
   unsigned long getCursorXY();
 };
