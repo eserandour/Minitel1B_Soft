@@ -347,7 +347,7 @@ public:
   
   // Protocole
   byte aiguillage(boolean commande, byte emetteur, byte recepteur);
-  byte statutAiguillage(byte module);
+  byte statusAiguillage(byte module);
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
