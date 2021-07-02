@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 02 juillet 2021 à 15h27
+   Minitel1B_Soft - Fichier d'en-tête - Version du 02 juillet 2021 à 15h38
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
    
@@ -233,6 +233,10 @@
 #define MIXTE2                     0x327E
 #define TELINFO                    0x317D
 
+// 13 L'état initial du minitel
+// 13.2 Sur réception d'une commande de reset
+#define RESET                      0x7F
+
 
 
 
@@ -348,6 +352,7 @@ public:
   // Protocole
   byte aiguillage(boolean commande, byte emetteur, byte recepteur);
   byte statusAiguillage(byte module);
+  byte reset();
 
 private: 
   byte currentSize = GRANDEUR_NORMALE;
