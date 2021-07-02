@@ -6,7 +6,9 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-02/07/2021 - Modification de la fonction<br>
+02/07/2021 - 1 nouvelle fonction :<br>
+byte reset()<br>
+Modification de la fonction<br>
 byte statusAiguillage(byte module)<br>
 
 01/07/2021 - 1 nouvelle fonction :<br>
