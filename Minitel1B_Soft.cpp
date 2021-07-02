@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 02 juillet 2021 à 15h27
+   Minitel1B_Soft - Fichier source - Version du 02 juillet 2021 à 15h38
    Copyright 2016-2021 - Eric Sérandour
    http://3615.entropie.org
 
@@ -739,6 +739,15 @@ byte Minitel::statusAiguillage(byte module) {  // Voir p. 136
   writeByte(module);
   // Acquittement
   return workingAiguillage(module);  // Renvoie un octet
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::reset() {  // Voir p.145
+  // Commande
+  writeBytesPRO(1);  // 0x1B 0x39
+  writeByte(RESET);  // 0x7F
+  // Acquittement
+  workingStandard(0x135E);  // SEP (0x13), 0x5E
 }
 /*--------------------------------------------------------------------*/
 
