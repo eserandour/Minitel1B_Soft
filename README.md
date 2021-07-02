@@ -8,11 +8,9 @@ http://543210.free.fr/TV/stum1b.pdf
 
 02/07/2021 - 1 nouvelle fonction :<br>
 byte reset()<br>
-Modification de la fonction<br>
-byte statusAiguillage(byte module)<br>
 
 01/07/2021 - 1 nouvelle fonction :<br>
-byte statutAiguillage(byte module)<br>
+byte statusAiguillage(byte module)<br>
 et mise à jour de :<br>
 byte pageMode()<br>
 byte scrollMode()<br>
