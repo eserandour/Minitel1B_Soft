@@ -6,7 +6,7 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-14/03/2022 - Sur proposition de iodeo :
+14/03/2022 - Sur proposition de iodeo :<br>
 Correction de bugs mineurs dans echo(boolean commande) et changeSpeed(int bauds).<br>
 Ajout d'une nouvelle fonction liée au modem (équivalent de la touche CONNEXION / FIN) :<br>
 byte connexion(boolean commande)<br>
