@@ -1,8 +1,11 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 02 juillet 2021 à 15h38
-   Copyright 2016-2021 - Eric Sérandour
+   Minitel1B_Soft - Fichier source - Version du 14 mars 2022 à 14h40
+   Copyright 2016-2022 - Eric Sérandour
    http://3615.entropie.org
+
+   Remerciements à :
+   BorisFR, iodeo
 
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -88,15 +91,18 @@ byte Minitel::readByte() {
 /*--------------------------------------------------------------------*/
 
 int Minitel::changeSpeed(int bauds) {  // Voir p.141
+  // Fonction modifiée par iodeo sur GitHub en octobre 2021
   // Format de la commande
   writeBytesPRO(2);  // 0x1B 0x3A
   writeByte(PROG);   // 0x6B
   switch (bauds) {
-    case  300 : writeByte(0b1010010); begin( 300); break;  // 0x52
-    case 1200 : writeByte(0b1100100); begin(1200); break;  // 0x64
-    case 4800 : writeByte(0b1110110); begin(4800); break;  // 0x76
-    case 9600 : writeByte(0b1111111); begin(9600); break;  // 0x7F (pour le Minitel 2 seulement)
+    case  300 : writeByte(0b1010010); break;  // 0x52
+    case 1200 : writeByte(0b1100100); break;  // 0x64
+    case 4800 : writeByte(0b1110110); break;  // 0x76
+    case 9600 : writeByte(0b1111111); break;  // 0x7F (pour le Minitel 2 seulement)
   }
+  end();
+  begin(bauds);
   // Acquittement
   return workingSpeed();  // En bauds (voir section Private ci-dessous)
 }
@@ -581,7 +587,7 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
 }
 /*--------------------------------------------------------------------*/
 
-unsigned long Minitel::getKeyCode() {  // Code ASCII en général
+unsigned long Minitel::getKeyCode(bool ascii) {  // Code ASCII en général (ascii=true) ou Code brut (ascii=false)
   unsigned long code = 0;
   // Code unique
   if (available()>0) {
@@ -596,34 +602,38 @@ unsigned long Minitel::getKeyCode() {  // Code ASCII en général
     while (!available()>0);  // Indispensable
     byte caractere = readByte();
     code = (code << 8) + caractere;
-    switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
-      case 0x194161 : code = 0xE0; break;  // à
-      case 0x194165 : code = 0xE8; break;  // è
-      case 0x194175 : code = 0xF9; break;  // ù
-      case 0x194265 : code = 0xE9; break;  // é
-      case 0x194361 : code = 0xE2; break;  // â
-      case 0x194365 : code = 0xEA; break;  // ê
-      case 0x194369 : code = 0xEE; break;  // î
-      case 0x19436F : code = 0xF4; break;  // ô
-      case 0x194375 : code = 0xFB; break;  // û
-      case 0x194861 : code = 0xE4; break;  // ä
-      case 0x194865 : code = 0xEB; break;  // ë
-      case 0x194869 : code = 0xEF; break;  // ï
-      case 0x19486F : code = 0xF6; break;  // ö
-      case 0x194875 : code = 0xFC; break;  // ü
-      case 0x194B63 : code = 0xE7; break;  // ç
-      default : code = caractere; break;
+    if (ascii) {
+      switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
+        case 0x194161 : code = 0xE0; break;  // à
+        case 0x194165 : code = 0xE8; break;  // è
+        case 0x194175 : code = 0xF9; break;  // ù
+        case 0x194265 : code = 0xE9; break;  // é
+        case 0x194361 : code = 0xE2; break;  // â
+        case 0x194365 : code = 0xEA; break;  // ê
+        case 0x194369 : code = 0xEE; break;  // î
+        case 0x19436F : code = 0xF4; break;  // ô
+        case 0x194375 : code = 0xFB; break;  // û
+        case 0x194861 : code = 0xE4; break;  // ä
+        case 0x194865 : code = 0xEB; break;  // ë
+        case 0x194869 : code = 0xEF; break;  // ï
+        case 0x19486F : code = 0xF6; break;  // ö
+        case 0x194875 : code = 0xFC; break;  // ü
+        case 0x194B63 : code = 0xE7; break;  // ç
+        default : code = caractere; break;
+      }
     }
   }
   // Les autres caractères spéciaux disponibles sous Arduino (2 codes)
   else {
-    switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
-      case 0x1923 : code = 0xA3; break;  // Livre
-      case 0x1927 : code = 0xA7; break;  // Paragraphe
-      case 0x1930 : code = 0xB0; break;  // Degré
-      case 0x1931 : code = 0xB1; break;  // Plus ou moins
-      case 0x1938 : code = 0xF7; break;  // Division
-      case 0x197B : code = 0xDF; break;  // Bêta
+    if (ascii) {
+      switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
+        case 0x1923 : code = 0xA3; break;  // Livre
+        case 0x1927 : code = 0xA7; break;  // Paragraphe
+        case 0x1930 : code = 0xB0; break;  // Degré
+        case 0x1931 : code = 0xB1; break;  // Plus ou moins
+        case 0x1938 : code = 0xF7; break;  // Division
+        case 0x197B : code = 0xDF; break;  // Bêta
+      }
     }
   }
   }
@@ -705,10 +715,11 @@ byte Minitel::standardKeyboard() {
 }
 /*--------------------------------------------------------------------*/
 
-byte Minitel::echo(boolean commande) {  // Voir p.81 et p.156
+byte Minitel::echo(boolean commande) {  // Voir p.81, p.135 et p.156
+  // Fonction modifiée par iodeo sur GitHub en octobre 2021
   // commande peut prendre comme valeur :
   // true, false
-  return aiguillage(commande, CODE_EMISSION_MODEM, CODE_RECEPTION_ECRAN);
+  return aiguillage(commande, CODE_EMISSION_CLAVIER, CODE_RECEPTION_MODEM);
 }
 /*--------------------------------------------------------------------*/
 
@@ -739,6 +750,18 @@ byte Minitel::statusAiguillage(byte module) {  // Voir p. 136
   writeByte(module);
   // Acquittement
   return workingAiguillage(module);  // Renvoie un octet
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::connexion(boolean commande) {  // Voir p.139
+  // Fonction proposée par iodeo sur GitHub en octobre 2021
+  // commande peut prendre comme valeur :
+  // true, false
+  // Commande
+  writeBytesPRO(1);  // 0x1B 0x39
+  writeByte(commande ? CONNEXION : DECONNEXION);  // 0x68 ou 0x67
+  // Acquittement
+  return workingModem();  // Renvoie un octet
 }
 /*--------------------------------------------------------------------*/
 
@@ -869,12 +892,12 @@ byte Minitel::workingKeyboard() {  // Voir p.142
     }
   }
   while (!available()>0);  // Indispensable
-  return readByte();
+  return readByte();  // Octet de status fonctionnement clavier
 }
 /*--------------------------------------------------------------------*/
 
 byte Minitel::workingAiguillage(byte module) {  // Voir p.136
-  // On récupère l'octet de statut d'aiguillage associé à un module :
+  // On récupère l'octet de status d'aiguillage associé à un module :
   // b7 : bit de parité
   // b6 : 1
   // b5 : 0
@@ -883,7 +906,7 @@ byte Minitel::workingAiguillage(byte module) {  // Voir p.136
   // b2 : modem             1 : liaison établie
   // b1 : clavier           0 : liaison coupée
   // b0 : écran
-  // L'octet de statut contient également l'état de la ressource que constitue le module lui-même (0 : module bloqué ; 1 : module actif)
+  // L'octet de status contient également l'état de la ressource que constitue le module lui-même (0 : module bloqué ; 1 : module actif)
   while (!isListening());   // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets
   while (trame != (0x1B3B63 << 8 | module)) {  // PRO3 (0x1B,0x3B), FROM (0x63), code réception ou émission du module
@@ -893,7 +916,24 @@ byte Minitel::workingAiguillage(byte module) {  // Voir p.136
     }
   }
   while (!available()>0);  // Indispensable
-  return readByte(); // Octet de statut associé à un module
+  return readByte(); // Octet de status associé à un module
+}
+/*--------------------------------------------------------------------*/
+
+byte Minitel::workingModem() {  // Voir p.126
+  // Fonction proposée par iodeo sur GitHub en octobre 2021
+  // On récupère uniquement la séquence immédiate 0x1359
+  // en cas de connexion confirmé, la séquence 0x1353 s'ajoutera - non traité ici
+  // en cas de timeout (environ 40sec), la séquence 0x1359 s'ajoutera - non traité ici
+  while (!isListening());   // On attend que le port soit sur écoute.
+  unsigned int trame = 0;  // 16 bits = 2 octets
+  while (trame >> 8 != 0x13) {
+    if (available() > 0) {
+      trame = (trame << 8) + readByte();
+      //Serial.println(trame, HEX);
+    }
+  }
+  return (byte) trame;
 }
 /*--------------------------------------------------------------------*/
 
