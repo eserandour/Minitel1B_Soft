@@ -1,8 +1,11 @@
 /////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 02 juillet 2021 à 15h38
-   Copyright 2016-2021 - Eric Sérandour
+   Minitel1B_Soft - Fichier d'en-tête - Version du 14 mars 2022 à 14h40
+   Copyright 2016-2022 - Eric Sérandour
    http://3615.entropie.org
+
+   Remerciements à :
+   BorisFR, iodeo
    
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -213,6 +216,10 @@
 #define TO                         0x62
 #define FROM                       0x63
 
+// 7 Commandes relatives au modem (voir p.139)
+#define CONNEXION                  0x68
+#define DECONNEXION                0x67
+
 // 8 Commandes relatives à la prise (voir p.141)
 #define PROG                       0x6B
 #define STATUS_VITESSE             0x74
@@ -342,7 +349,7 @@ public:
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
 
   // Clavier
-  unsigned long getKeyCode();
+  unsigned long getKeyCode(bool ascii = true);
   byte smallMode();  // Mode minuscules du clavier
   byte capitalMode();  // Mode majuscules du clavier
   byte extendedKeyboard();  // Clavier étendu
@@ -352,6 +359,7 @@ public:
   // Protocole
   byte aiguillage(boolean commande, byte emetteur, byte recepteur);
   byte statusAiguillage(byte module);
+  byte connexion(boolean commande);
   byte reset();
 
 private: 
@@ -367,6 +375,7 @@ private:
   byte workingMode();
   byte workingKeyboard();
   byte workingAiguillage(byte module);
+  byte workingModem();
   
   unsigned long getCursorXY();
 };
