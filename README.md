@@ -6,6 +6,13 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
+14/03/2022 - Sur proposition de iodeo :
+Correction de bugs mineurs dans echo(boolean commande) et changeSpeed(int bauds).<br>
+Ajout d'une nouvelle fonction liée au modem (équivalent de la touche CONNEXION / FIN) :<br>
+byte connexion(boolean commande)<br>
+Ajout d'une option qui permet de désactiver la conversion des caractères en ascii étendue (cela sert en particulier pour la communication avec des services Minitel externes) :<br>
+unsigned long getKeyCode(bool ascii = true)
+
 02/07/2021 - 1 nouvelle fonction :<br>
 byte reset()<br>
 
