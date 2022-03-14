@@ -11,7 +11,8 @@ Correction de bugs mineurs dans echo(boolean commande) et changeSpeed(int bauds)
 Ajout d'une nouvelle fonction liée au modem (équivalent de la touche CONNEXION / FIN) :<br>
 byte connexion(boolean commande)<br>
 Ajout d'une option qui permet de désactiver la conversion des caractères en ascii étendue (cela sert en particulier pour la communication avec des services Minitel externes) :<br>
-unsigned long getKeyCode(bool ascii = true)
+unsigned long getKeyCode(bool ascii = true)<br>
+Ajout d'un exemple basique : HelloWorld.ino
 
 02/07/2021 - 1 nouvelle fonction :<br>
 byte reset()<br>
