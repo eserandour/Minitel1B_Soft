@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 14 mars 2022 à 14h40
+   Minitel1B_Soft - Fichier source - Version du 25 juin 2022 à 02h29
    Copyright 2016-2022 - Eric Sérandour
    http://3615.entropie.org
 
@@ -770,7 +770,7 @@ byte Minitel::reset() {  // Voir p.145
   writeBytesPRO(1);  // 0x1B 0x39
   writeByte(RESET);  // 0x7F
   // Acquittement
-  workingStandard(0x135E);  // SEP (0x13), 0x5E
+  return workingStandard(0x135E);  // SEP (0x13), 0x5E
 }
 /*--------------------------------------------------------------------*/
 
