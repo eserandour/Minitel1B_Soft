@@ -6,6 +6,9 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
+25/06/2022 - Sur proposition de iodeo :<br>
+Correction d'un bug dans la fonction byte reset()
+
 24/04/2022 - Ajout d'un exemple : Portrait.ino (affichage d'une image)<br>
 
 14/03/2022 - Sur proposition de iodeo :<br>
