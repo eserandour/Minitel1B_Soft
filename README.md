@@ -14,7 +14,7 @@ Tweet_3615.ino<br>
 
 28/02/2023 - Sur proposition de iodeo :<br>
 Pour une meilleure gestion des caractères spéciaux (notamment dans la console série) :<br>
-Ajout de nouvelles fonctions :<br>
+<b>Ajout de nouvelles fonctions :</b><br>
 void writeCode(unsigned long code)<br>
 String getString(unsigned long code)<br>
 boolean isVisualisable(unsigned long code)<br>
