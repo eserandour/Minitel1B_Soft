@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   3615 - Version du 18 juin 2017 à 15h06
-   Copyright 2017 - Eric Sérandour
+   3615 - Version du 28 février 2023 à 21h55
+   Copyright 2017-2023 - Eric Sérandour
    
    Documentation utilisée :
    Spécifications Techniques d'Utilisation du Minitel 1B
@@ -137,7 +137,8 @@ void lectureChamp(int premiereLigne, int nbLignes) {
         (touche != ENVOI)) {
       if (nbCaracteres < 40*nbLignes) {
         nbCaracteres++;
-        texte += char(touche);
+        // texte += char(touche);
+        texte += minitel.getString(touche);
       }
       if (nbCaracteres == 40*nbLignes) {
         minitel.moveCursorXY(40,(premiereLigne-1)+nbLignes);
