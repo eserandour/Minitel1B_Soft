@@ -6,7 +6,27 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-28/02/2023 - Une nouvelle version va être mise en ligne très rapidement.<br>
+Dernière Version : 28/02/2023 à 21h55.<br>
+
+28/02/2023
+Modification des exemples :<br>
+Tweet_3615.ino<br>
+
+28/02/2023 - Sur proposition de iodeo :<br>
+Pour une meilleure gestion des caractères spéciaux :<br>
+Ajout de nouvelles fonctions :<br>
+void writeCode(unsigned long code)<br>
+String getString(unsigned long code)<br>
+boolean isVisualisable(unsigned long code)<br>
+Modification de :<br>
+void print(String chaine)<br>
+unsigned long getKeyCode(bool unicode = true)<br>
+Supression, car devenues inutiles, de :<br>
+void printDiacriticChar(unsigned char caractere)<br>
+boolean isDiacritic(unsigned char caractere)<br>
+Ajout de fonctions pour identifier le Minitel :<br>
+unsigned long identifyDevice()<br>
+unsigned long identificationBytes()<br>
 
 25/06/2022 - Sur proposition de iodeo :<br>
 Correction d'un bug dans la fonction byte reset()
