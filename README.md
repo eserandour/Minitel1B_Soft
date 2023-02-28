@@ -6,6 +6,8 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
+28/02/2023 - Une nouvelle version va être mise en ligne très rapidement.<br>
+
 25/06/2022 - Sur proposition de iodeo :<br>
 Correction d'un bug dans la fonction byte reset()
 
