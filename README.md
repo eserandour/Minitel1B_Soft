@@ -6,14 +6,14 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-Dernière Version : 28/02/2023 à 21h55.<br>
+<b>Dernière Version</b> : 28/02/2023 à 21h55.<br>
 
 28/02/2023<br>
 Modification de l'exemple :<br>
 Tweet_3615.ino<br>
 
 28/02/2023 - Sur proposition de iodeo :<br>
-Pour une meilleure gestion des caractères spéciaux (notamment dans la console série) :<br>
+Pour une meilleure gestion des <b>caractères spéciaux</b> (notamment dans la console série) :<br>
 <b>Ajout de nouvelles fonctions :</b><br>
 void writeCode(unsigned long code)<br>
 String getString(unsigned long code)<br>
