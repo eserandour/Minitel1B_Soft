@@ -24,9 +24,8 @@ unsigned long getKeyCode(bool unicode = true)<br>
 <b>Supression, car devenues inutiles, de :</b><br>
 void printDiacriticChar(unsigned char caractere)<br>
 boolean isDiacritic(unsigned char caractere)<br>
-<b>Ajout de fonctions pour identifier le Minitel :</b><br>
+<b>Ajout d'une fonction pour identifier le Minitel :</b><br>
 unsigned long identifyDevice()<br>
-unsigned long identificationBytes()<br>
 
 25/06/2022 - Sur proposition de iodeo :<br>
 Correction d'un bug dans la fonction byte reset()
