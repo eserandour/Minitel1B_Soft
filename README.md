@@ -18,13 +18,13 @@ Pour une meilleure gestion des caractères spéciaux (notamment dans la console 
 void writeCode(unsigned long code)<br>
 String getString(unsigned long code)<br>
 boolean isVisualisable(unsigned long code)<br>
-Modification de :<br>
+<b>Modification de :</b><br>
 void print(String chaine)<br>
 unsigned long getKeyCode(bool unicode = true)<br>
-Supression, car devenues inutiles, de :<br>
+<b>Supression, car devenues inutiles, de :</b><br>
 void printDiacriticChar(unsigned char caractere)<br>
 boolean isDiacritic(unsigned char caractere)<br>
-Ajout de fonctions pour identifier le Minitel :<br>
+<b>Ajout de fonctions pour identifier le Minitel :</b><br>
 unsigned long identifyDevice()<br>
 unsigned long identificationBytes()<br>
 
