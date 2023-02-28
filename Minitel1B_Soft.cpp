@@ -1,8 +1,8 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 25 juin 2022 à 02h29
-   Copyright 2016-2022 - Eric Sérandour
-   http://3615.entropie.org
+   Minitel1B_Soft - Fichier source - Version du 28 février 2023 à 21h55
+   Copyright 2016-2023 - Eric Sérandour
+   https://entropie.org/3615/
 
    Remerciements à :
    BorisFR, iodeo
@@ -49,8 +49,8 @@ void Minitel::writeByte(byte b) {
   boolean parite = 0;
   for (int i=0; i<7; i++) {
     if (bitRead(b,i) == 1)  {
-	  parite = !parite;
-	}
+      parite = !parite;
+    }
   }
   if (parite) {
     bitWrite(b,7,1);  // Ecriture du bit de parité
@@ -58,7 +58,7 @@ void Minitel::writeByte(byte b) {
   else {
     bitWrite(b,7,0);  // Ecriture du bit de parité
   }
-  write(b);  // Envoi de l'octet sur le port série logiciel
+  write(b);  // Envoi de l'octet sur le port série
 }
 /*--------------------------------------------------------------------*/
 
@@ -68,18 +68,33 @@ void Minitel::writeWord(word w) {
 }
 /*--------------------------------------------------------------------*/
 
+void Minitel::writeCode(unsigned long code) {
+  // Fonction proposée par iodeo sur GitHub en février 2023
+  // Initialement, cette fonction se nommait write, mais j'ai dû changer
+  // son nom car avec ce nom un problème est apparu dans l'usage de la
+  // bibliothèque Minitel1B_Soft : le Minitel se bloquait. Il s'agissait
+  // probablement d'un conflit avec la fonction write de la bibliothèque
+  // SoftwareSerial. Par souci de cohérence entre les bibliothèques
+  // Minitel1B_Hard et Minitel1B_Soft, j'ai renommé write en writeCode.
+  if (code > 0x00FFFFFF) writeByte((byte) (code >> 24));
+  if (code > 0x0000FFFF) writeByte((byte) (code >> 16));
+  if (code > 0x000000FF) writeByte((byte) (code >> 8));
+  writeByte((byte) code);
+}
+/*--------------------------------------------------------------------*/
+
 byte Minitel::readByte() {
   byte b = read();
   // Le bit de parité est à 0 si la somme des autres bits est paire
-  // et à 1 si elle est impaire.	
+  // et à 1 si elle est impaire.
   boolean parite = 0;
   for (int i=0; i<7; i++) {
     if (bitRead(b,i) == 1)  {
-	  parite = !parite;
-	}
+      parite = !parite;
+    }
   }
   if (bitRead(b,7) == parite) {  // La transmission est bonne, on peut récupérer la donnée.
-	if (bitRead(b,7) == 1) {  // Cas où le bit de parité vaut 1.
+    if (bitRead(b,7) == 1) {  // Cas où le bit de parité vaut 1.
       b = b ^ 0b10000000;  // OU exclusif pour mettre le bit de parité à 0 afin de récupérer la donnée.
     }
     return b;
@@ -87,6 +102,38 @@ byte Minitel::readByte() {
   else {
     return 0xFF;  // Pour indiquer une erreur de parité.
   }
+}
+/*--------------------------------------------------------------------*/
+
+unsigned long Minitel::identifyDevice() {  // Voir p.139
+  // Fonction proposée par iodeo sur GitHub en février 2023
+  // Demande
+  writeBytesPRO(1);  // 0x1B 0x39
+  writeByte(ENQROM);  // 0x7B
+  // Réponse
+  return identificationBytes();  // 3 octets
+                                 // octet définissant le constructeur du Minitel
+                                 // octet définissant le type du Minitel
+                                 // octet définissant la version du logiciel
+
+  // Codes d'identification de l'octet de poids fort :
+  /*
+     Telic-Alcatel : 0x43
+     à compléter...
+  */
+
+  // Codes d'identification de l'octet du milieu (voir p.103 du Guide STU du Minitel 2) :
+  /*
+     Minitel 1             : 0x62, 0x63 ou 0x72 suivant les modèles
+     Minitel 1 Couleur     : 0x73
+     Minitel 1 Dialogue    : 0x72
+     Minitel 10            : 0x64 ou 0x66 suivant les modèles
+     Minitel 1 Bistandard  : 0x75
+     Minitel 10 Bistandard : 0x77
+     Minitel 2             : 0x76
+     Minitel 12            : 0x7A
+     Minitel 5             : 0x79
+  */
 }
 /*--------------------------------------------------------------------*/
 
@@ -101,6 +148,9 @@ int Minitel::changeSpeed(int bauds) {  // Voir p.141
     case 4800 : writeByte(0b1110110); break;  // 0x76
     case 9600 : writeByte(0b1111111); break;  // 0x7F (pour le Minitel 2 seulement)
   }
+  #if defined(ESP32) || defined(ARDUINO_ARCH_ESP32)
+  flush(false); // Patch pour Arduino-ESP32 core v1.0.6 https://github.com/espressif/arduino-esp32
+  #endif
   end();
   begin(bauds);
   // Acquittement
@@ -176,7 +226,7 @@ void Minitel::moveCursorXY(int x, int y) {  // Voir p.95
 void Minitel::moveCursorLeft(int n) {  // Voir p.94 et 95
   if (n==1) { writeByte(BS); }
   else if (n>1) {
-	// Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
+    // Curseur vers la gauche de n colonnes. Arrêt au bord gauche de l'écran.
     writeWord(CSI);   // 0x1B 0x5B
     writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x44);
@@ -187,7 +237,7 @@ void Minitel::moveCursorLeft(int n) {  // Voir p.94 et 95
 void Minitel::moveCursorRight(int n) {  // Voir p.94
   if (n==1) { writeByte(HT); }
   else if (n>1) {
-	// Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
+    // Curseur vers la droite de n colonnes. Arrêt au bord droit de l'écran.
     writeWord(CSI);   // 0x1B 0x5B
     writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x43);
@@ -198,7 +248,7 @@ void Minitel::moveCursorRight(int n) {  // Voir p.94
 void Minitel::moveCursorDown(int n) {  // Voir p.94
   if (n==1) { writeByte(LF); }
   else if (n>1) {
-	// Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
+    // Curseur vers le bas de n rangées. Arrêt en bas de l'écran.
     writeWord(CSI);   // 0x1B 0x5B
     writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x42);
@@ -209,7 +259,7 @@ void Minitel::moveCursorDown(int n) {  // Voir p.94
 void Minitel::moveCursorUp(int n) {  // Voir p.94
   if (n==1) { writeByte(VT); }
   else if (n>1) {
-	// Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
+    // Curseur vers le haut de n rangées. Arrêt en haut de l'écran.
     writeWord(CSI);   // 0x1B 0x5B
     writeBytesP(n);   // Pn : Voir section Private ci-dessous
     writeByte(0x41);
@@ -407,16 +457,96 @@ void Minitel::attributs(byte attribut) {
 /*--------------------------------------------------------------------*/
 
 void Minitel::print(String chaine) {
+  // Fonction modifiée par iodeo sur GitHub en février 2023
+/*
+  // Fonction initiale (pour mémoire)  // Obsolète depuis le 26/02/2023
   for (int i=0; i<chaine.length(); i++) {
     unsigned char caractere = chaine.charAt(i);
     if (!isDiacritic(caractere)) {
-	  printChar(caractere);
-	}
-	else {
-	  i+=1;  // Un caractère accentué prend la place de 2 caractères
-	  caractere = chaine.charAt(i);
-	  printDiacriticChar(caractere);
-	}
+      printChar(caractere);
+    }
+    else {
+      i+=1;  // Un caractère accentué prend la place de 2 caractères
+      caractere = chaine.charAt(i);
+      printDiacriticChar(caractere);
+    }
+  }
+*/
+  // codes UTF-8 vers codes Minitel
+  unsigned int i = 0;
+  while (i < chaine.length()) {
+    unsigned long code = (byte) chaine.charAt(i++);
+    if (code < SP) code = 0;
+    else if (code >= SP && code <= DEL) {
+      switch (code) {
+        case 0x5E: code = 0; break; // ^ non visualisable seul
+        case 0x60: code = 0; break; // ` non visualisable seul
+      }
+    }
+    else if (code == 0xC2 || code == 0xC3 || code == 0xC5 || code == 0xCE) {
+      // Caractères sur 2 octets
+      code = (code << 8) + (byte) chaine.charAt(i++);
+      switch (code) {                        // Voir p.90 pour VGP5 ou VGP2
+                         // 0x19 => SS2 (Accès au jeu G2)
+                         // 0x0F => SI (Accès au jeu G0)
+        case 0xC2A3: code = 0x1923; break;   // £ (VGP5 et VGP2)
+        case 0xC2A7: code = 0x1927; break;   // § (VGP5 seulement)
+        case 0xC2B0: code = 0x1930; break;   // ° (VGP5 et VGP2)
+        case 0xC2B1: code = 0x1931; break;   // ± (VGP5 et VGP2)
+        case 0xC2BC: code = 0x193C; break;   // ¼ (VGP5 et VGP2)
+        case 0xC2BD: code = 0x193D; break;   // ½ (VGP5 et VGP2)
+        case 0xC2BE: code = 0x193E; break;   // ¾ (VGP5 et VGP2)
+        case 0xC380: code = 0x0F41; break;   // À (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC382: code = 0x0F41; break;   // Â (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC384: code = 0x0F41; break;   // Ä (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC387: code = 0x0F43; break;   // Ç (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC388: code = 0x0F45; break;   // È (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC389: code = 0x0F45; break;   // É (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC38A: code = 0x0F45; break;   // Ê (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC38B: code = 0x0F45; break;   // Ë (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC38E: code = 0x0F49; break;   // Î (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC38F: code = 0x0F49; break;   // Ï (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC394: code = 0x0F4F; break;   // Ô (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC396: code = 0x0F4F; break;   // Ö (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC399: code = 0x0F55; break;   // Ù (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC39B: code = 0x0F55; break;   // Û (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC39C: code = 0x0F55; break;   // Ü (Aucune lettre accentuée majuscule n'est disponible - voir p.90)
+        case 0xC3A0: code = 0x194161; break; // à (VGP5 et VGP2)
+        case 0xC3A2: code = 0x194361; break; // â (VGP5 et VGP2)
+        case 0xC3A4: code = 0x194861; break; // ä (VGP5 seulement)
+        case 0xC3A7: code = 0x194B63; break; // ç (VGP5 et VGP2)
+        case 0xC3A8: code = 0x194165; break; // è (VGP5 et VGP2)
+        case 0xC3A9: code = 0x194265; break; // é (VGP5 et VGP2)
+        case 0xC3AA: code = 0x194365; break; // ê (VGP5 et VGP2)
+        case 0xC3AB: code = 0x194865; break; // ë (VGP5 et VGP2)
+        case 0xC3AE: code = 0x194369; break; // î (VGP5 et VGP2)
+        case 0xC3AF: code = 0x194869; break; // ï (VGP5 et VGP2)
+        case 0xC3B4: code = 0x19436F; break; // ô (VGP5 et VGP2)
+        case 0xC3B6: code = 0x19486F; break; // ö (VGP5 seulement)
+        case 0xC3B7: code = 0x1938; break;   // ÷ (VGP5 et VGP2)
+        case 0xC3B9: code = 0x194175; break; // ù (VGP5 et VGP2)
+        case 0xC3BB: code = 0x194375; break; // û (VGP5 et VGP2)
+        case 0xC3BC: code = 0x194875; break; // ü (VGP5 seulement)
+        case 0xC592: code = 0x196A; break;   // Œ (VGP5 et VGP2)
+        case 0xC593: code = 0x197A; break;   // œ (VGP5 et VGP2)
+        case 0xCEB2: code = 0x197B; break;   // β (VGP5 seulement)
+        default: code = 0; // supposé non-visualisable
+      }
+    }
+    else if (code == 0xE2) {
+      // Caractères sur 3 octets
+      code = (code << 8) + (byte) chaine.charAt(i++);
+      code = (code << 8) + (byte) chaine.charAt(i++);
+      switch (code) {
+        case 0xE28094: code = 0x60; break;   // —
+        case 0xE28690: code = 0x192C; break; // ←
+        case 0xE28691: code = 0x5E; break;   // ↑
+        case 0xE28692: code = 0x192E; break; // →
+        case 0xE28693: code = 0x192F; break; // ↓
+        default: code = 0; // supposé non-visualisable
+      }
+    }
+    if (code != 0) writeCode(code);
   }
 }
 /*--------------------------------------------------------------------*/
@@ -443,14 +573,16 @@ void Minitel::println() {
 /*--------------------------------------------------------------------*/
 
 void Minitel::printChar(char caractere) {
+  // Peut s'utiliser de 2 manières : printChar('A') ou printChar(0x41) par exemple
+  //                                 printChar("A") ne fonctionne pas
   byte charByte = getCharByte(caractere);
   if (isValidChar(charByte)) {
     writeByte(charByte);
   }
 }
 /*--------------------------------------------------------------------*/
-
-void Minitel::printDiacriticChar(unsigned char caractere) {
+/*
+void Minitel::printDiacriticChar(unsigned char caractere) {  // Obsolète depuis le 26/02/2023
   writeByte(SS2);  // Accès au jeu G2 (voir p.103)
   String diacritics = "àâäèéêëîïôöùûüçÀÂÄÈÉÊËÎÏÔÖÙÛÜÇ";
   // Dans une chaine de caractères, un caractère diacritique prend la
@@ -493,6 +625,7 @@ void Minitel::printDiacriticChar(unsigned char caractere) {
   }
   printChar(car);
 }
+*/
 /*--------------------------------------------------------------------*/
 
 void Minitel::printSpecialChar(byte b) {
@@ -507,8 +640,36 @@ byte Minitel::getCharByte(char caractere) {
   // Dans la chaine ci-dessous, on utilise l'échappement (\) :
   // \" rend au guillemet sa signification littérale.
   // \\ donne à l'antislash sa signification littérale .
-  String caracteres = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_xabcdefghijklmnopqrstuvwxyz";
+  String caracteres = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_xabcdefghijklmnopqrstuvwxyz{|}";
   return (byte) caracteres.lastIndexOf(caractere);
+}
+/*--------------------------------------------------------------------*/
+
+String Minitel::getString(unsigned long code) {
+  // Fonction proposée par iodeo sur GitHub en février 2023
+  // Convertit un caractère Unicode en String UTF-8
+  // Renvoie "" si le code ne correspond pas à un caractère visualisable
+  String str = "";
+  // Pour test
+  /*
+  Serial.print("isVisual ");
+  Serial.print(code);
+  Serial.print("\t : ");
+  Serial.println(isVisualisable(code));
+  */
+  if (isVisualisable(code)) {
+    if (code < 0x80) { // U+0000 à U+007F
+      str += char(code);
+    } else if (code < 0x800) { // U+0080 à U+07FF
+      str += char((0b110 << 5) | (code >> 6));
+      str += char((0b10 << 6) | (code & 0x3F));
+    } else if(code < 0x10000) { // U+0800 à U+FFFF
+      str += char((0b1110 << 4) | (code >> 12));
+      str += char((0b10 << 6) | ((code >> 6) & 0x3F));
+      str += char((0b10 << 6) | (code & 0x3F));
+    }
+  }
+  return str;
 }
 /*--------------------------------------------------------------------*/
 
@@ -570,7 +731,7 @@ void Minitel::hLine(int x1, int y, int x2, int position) {
 void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
   textMode();
   switch (sens) {
-	case DOWN : moveCursorXY(x,y1); break;
+    case DOWN : moveCursorXY(x,y1); break;
     case UP   : moveCursorXY(x,y2); break;
   }
   for (int i=0; i<y2-y1; i++) {
@@ -580,14 +741,16 @@ void Minitel::vLine(int x, int y1, int y2, int position, int sens) {
       case RIGHT  : writeByte(0x7D); break;
     }
     switch (sens) {
-	  case DOWN : moveCursorLeft(1); moveCursorDown(1); break;
+      case DOWN : moveCursorLeft(1); moveCursorDown(1); break;
       case UP   : moveCursorLeft(1); moveCursorUp(1); break;
     }
   }
 }
 /*--------------------------------------------------------------------*/
 
-unsigned long Minitel::getKeyCode(bool ascii) {  // Code ASCII en général (ascii=true) ou Code brut (ascii=false)
+unsigned long Minitel::getKeyCode(bool unicode) {
+  // Renvoie le code brut émis par le clavier (unicode = false)
+  // ou sa conversion unicode si applicable (unicode = true, choix par défaut)
   unsigned long code = 0;
   // Code unique
   if (available()>0) {
@@ -599,43 +762,48 @@ unsigned long Minitel::getKeyCode(bool ascii) {  // Code ASCII en général (asc
     code = (code << 8) + readByte();
     // Les diacritiques (3 codes)
     if ((code == 0x1941) || (code == 0x1942) || (code == 0x1943) || (code == 0x1948) || (code == 0x194B)) {  // Accents, tréma, cédille
-    while (!available()>0);  // Indispensable
-    byte caractere = readByte();
-    code = (code << 8) + caractere;
-    if (ascii) {
-      switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
-        case 0x194161 : code = 0xE0; break;  // à
-        case 0x194165 : code = 0xE8; break;  // è
-        case 0x194175 : code = 0xF9; break;  // ù
-        case 0x194265 : code = 0xE9; break;  // é
-        case 0x194361 : code = 0xE2; break;  // â
-        case 0x194365 : code = 0xEA; break;  // ê
-        case 0x194369 : code = 0xEE; break;  // î
-        case 0x19436F : code = 0xF4; break;  // ô
-        case 0x194375 : code = 0xFB; break;  // û
-        case 0x194861 : code = 0xE4; break;  // ä
-        case 0x194865 : code = 0xEB; break;  // ë
-        case 0x194869 : code = 0xEF; break;  // ï
-        case 0x19486F : code = 0xF6; break;  // ö
-        case 0x194875 : code = 0xFC; break;  // ü
-        case 0x194B63 : code = 0xE7; break;  // ç
-        default : code = caractere; break;
+      while (!available()>0);  // Indispensable
+      byte caractere = readByte();
+      code = (code << 8) + caractere;
+      if (unicode) {
+        switch (code) {  // On convertit le code reçu en unicode
+          case 0x194161 : code = 0xE0; break;  // à
+          case 0x194165 : code = 0xE8; break;  // è
+          case 0x194175 : code = 0xF9; break;  // ù
+          case 0x194265 : code = 0xE9; break;  // é
+          case 0x194361 : code = 0xE2; break;  // â
+          case 0x194365 : code = 0xEA; break;  // ê
+          case 0x194369 : code = 0xEE; break;  // î
+          case 0x19436F : code = 0xF4; break;  // ô
+          case 0x194375 : code = 0xFB; break;  // û
+          case 0x194861 : code = 0xE4; break;  // ä
+          case 0x194865 : code = 0xEB; break;  // ë
+          case 0x194869 : code = 0xEF; break;  // ï
+          case 0x19486F : code = 0xF6; break;  // ö
+          case 0x194875 : code = 0xFC; break;  // ü
+          case 0x194B63 : code = 0xE7; break;  // ç
+          default : code = caractere; break;
+        }
       }
     }
-  }
-  // Les autres caractères spéciaux disponibles sous Arduino (2 codes)
-  else {
-    if (ascii) {
-      switch (code) {  // On convertit le code reçu en un code Extended ASCII Table (Windows-1252)
-        case 0x1923 : code = 0xA3; break;  // Livre
-        case 0x1927 : code = 0xA7; break;  // Paragraphe
-        case 0x1930 : code = 0xB0; break;  // Degré
-        case 0x1931 : code = 0xB1; break;  // Plus ou moins
-        case 0x1938 : code = 0xF7; break;  // Division
-        case 0x197B : code = 0xDF; break;  // Bêta
+    // Les autres caractères spéciaux disponibles sous Arduino (2 codes)
+    else {
+      if (unicode) {
+        switch (code) {  // On convertit le code reçu en unicode
+          case 0x1923 : code = 0xA3; break;    // Livre
+          case 0x1927 : code = 0xA7; break;    // Paragraphe
+          case 0x192C : code = 0x2190; break;  // Flèche gauche
+          case 0x192E : code = 0x2192; break;  // Flèche droite
+          case 0x192F : code = 0x2193; break;  // Flèche bas
+          case 0x1930 : code = 0xB0; break;    // Degré
+          case 0x1931 : code = 0xB1; break;    // Plus ou moins
+          case 0x1938 : code = 0xF7; break;    // Division
+          case 0x196A : code = 0x0152; break;  // Ligature OE
+          case 0x197A : code = 0x0153; break;  // Ligature oe
+          case 0x197B : code = 0x03B2; break;  // Bêta
+        }
       }
     }
-  }
   }
   // Touches de fonction (voir p.123)
   else if (code == 0x13) {
@@ -658,6 +826,12 @@ unsigned long Minitel::getKeyCode(bool ascii) {  // Code ASCII en général (asc
           code = (code << 8) + readByte();
         }
       }
+    }
+  }
+  else {
+    if(unicode) { // On convertit les codes uniques en unicode
+      if (code == 0x5E) code = 0x2191; // Flèche haut
+      else if (code == 0x60) code = 0x2014; // Tiret cadratin
     }
   }
 // Pour test
@@ -792,13 +966,70 @@ boolean Minitel::isValidChar(byte index) {
   return false;
 }
 /*--------------------------------------------------------------------*/
-
-boolean Minitel::isDiacritic(unsigned char caractere) {
+/*
+boolean Minitel::isDiacritic(unsigned char caractere) {  // Obsolète depuis le 26/02/2023
   String diacritics = "àâäèéêëîïôöùûüçÀÂÄÈÉÊËÎÏÔÖÙÛÜÇ";
   if (diacritics.indexOf(caractere) >= 0) {
     return true; 
   }
   return false;
+}
+*/
+/*--------------------------------------------------------------------*/
+
+boolean Minitel::isVisualisable(unsigned long code) {
+  // Fonction proposée par iodeo sur GitHub en février 2023
+  // Fonction utilisée dans getString(unsigned long code)
+  // Teste la conversion d'un code brut clavier en équivalent Unicode
+  // Renvoie 0 si le code ne correspond pas à un caractère visualisable
+  // Voir https://iodeo.github.io/MinitelKeyboardHelper/
+  
+  // Les caractères de contrôle ne sont pas visualisables
+  if (code < SP) return false;
+  // Les autres caractères de 7 bits sont visualisables
+  if (code <= DEL) return true;
+  switch (code) {
+    case 0x00A3: return true; // £
+    case 0x00A7: return true; // § (VGP5 seulement, pas VGP2 - voir p.90)
+    case 0x00B0: return true; // ° Ctrl 0 au clavier
+    case 0x00B1: return true; // ± Ctrl * au clavier
+    case 0x00BC: return true; // ¼
+    case 0x00BD: return true; // ½
+    case 0x00BE: return true; // ¾
+    /*  iodeo, je ne comprends pas cette partie car
+        aucune lettre accentuée majuscule n'est disponible sur le Minitel - voir page 90
+
+    case 0x00C0: return true; // À (VGP2)
+    case 0x00C7: return true; // Ç (VGP2)
+    case 0x00C8: return true; // È (VGP2)
+    case 0x00C9: return true; // É (VGP2)
+    */
+    case 0x00E0: return true; // à
+    case 0x00E2: return true; // â
+    case 0x00E4: return true; // ä (VGP5 seulement, pas VGP2 - voir p.90)
+    case 0x00E7: return true; // ç
+    case 0x00E8: return true; // è
+    case 0x00E9: return true; // é
+    case 0x00EA: return true; // ê
+    case 0x00EB: return true; // ë
+    case 0x00EE: return true; // î
+    case 0x00EF: return true; // ï
+    case 0x00F4: return true; // ô
+    case 0x00F6: return true; // ö (VGP5 seulement, pas VGP2 - voir p.90)
+    case 0x00F7: return true; // ÷ Ctrl 7 au clavier
+    case 0x00F9: return true; // ù
+    case 0x00FB: return true; // û
+    case 0x00FC: return true; // ü (VGP5 seulement, pas VGP2 - voir p.90)
+    case 0x0152: return true; // Œ
+    case 0x0153: return true; // œ
+    case 0x03B2: return true; // β (VGP5 seulement, pas VGP2 - voir p.90)
+    case 0x2014: return true; // — Ctrl 5 au clavier
+    case 0x2190: return true; // ← Ctrl 8 au clavier
+    case 0x2191: return true; // ↑
+    case 0x2192: return true; // → Ctrl 9 au clavier
+    case 0x2193: return true; // ↓ Ctrl # au clavier
+  }
+  return false; // Les caractères non listés sont supposés non visualisables
 }
 /*--------------------------------------------------------------------*/
 
@@ -824,15 +1055,33 @@ void Minitel::writeBytesPRO(int n) {  // Voir p.134
 }
 /*--------------------------------------------------------------------*/
 
+unsigned long Minitel::identificationBytes() {  // Voir p.138
+  while (!isListening());  // On attend que le port soit sur écoute.
+  unsigned long trame = 0;  // 32 bits = 4 octets
+  while (trame >> 24 != 0x01) {  // La trame doit débuter par SOH (0x01)
+    if (available() > 0) {
+      trame = (trame << 8) + readByte();
+    }
+  }
+  while (!available()>0); // Indispensable
+  if (readByte() != 0x04) return 0;  // La trame doit se terminer par EOT (0x04)
+  trame = (trame << 8) >> 8;  // On élimine l'octet SOH (0x01) de la trame
+  return trame;  // 3 octets
+                 // octet définissant le constructeur du Minitel
+                 // octet définissant le type du Minitel
+                 // octet définissant la version du logiciel
+}
+/*--------------------------------------------------------------------*/
+
 int Minitel::workingSpeed() {
   int bauds = -1;
-  while (!isListening());   // On attend que le port soit sur écoute.
+  while (!isListening());  // On attend que le port soit sur écoute.
   unsigned long time = millis();
   unsigned long duree = 0;
   unsigned long trame = 0;  // 32 bits = 4 octets
   // On se donne 1000 ms pour récupérer une trame exploitable
   while ((trame >> 8 != 0x1B3A75) && (duree < 1000)) {  // Voir p.141
-	if (available() > 0) {
+    if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
     }
@@ -844,20 +1093,26 @@ int Minitel::workingSpeed() {
     case 0x1B3A7576 : bauds = 4800; break;
     case 0x1B3A757F : bauds = 9600; break;  // Pour le Minitel 2 seulement
   }
-  return bauds;	
+  return bauds;
 }
 /*--------------------------------------------------------------------*/
 
 byte Minitel::workingStandard(unsigned long sequence) {
-  while (!isListening());   // On attend que le port soit sur écoute.
+  // Fonction modifiée par iodeo sur GitHub en octobre 2021
+  while (!isListening());  // On attend que le port soit sur écoute.
+  unsigned long time = millis();
+  unsigned long duree = 0;
   unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame != sequence) {
+  // On se donne 100ms pour recevoir l'acquittement
+  // Sinon, on peut supposer que le mode demandé était déjà actif
+  while ((trame != sequence) && (duree < 100)) {
     if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
     }
+    duree = millis() - time;
   }
-  return 0;
+  return (trame == sequence)? 1 : 0;
 }
 /*--------------------------------------------------------------------*/
 
@@ -867,9 +1122,9 @@ byte Minitel::workingMode() {  // Voir p.143
   // PC : PCE (1 = actif)
   // RL : rouleau (1 = actif)
   // F  : format d'écran (1 = 80 colonnes)
-  while (!isListening());   // On attend que le port soit sur écoute.
+  while (!isListening());  // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame >> 8 != 0x1B3A73) {
+  while (trame >> 8 != 0x1B3A73) {  // PRO2 (0x1B,0x3A), REP_STATUS_FONCTIONNEMENT (0x73)
     if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
@@ -883,21 +1138,21 @@ byte Minitel::workingKeyboard() {  // Voir p.142
   // On récupère notamment les 3 bits de poids faibles suivants : C0 0 Eten
   // Eten : mode étendu (1 = actif)
   // C0   : codage en jeu C0 des touches de gestion du curseur (1 = actif)
-  while (!isListening());   // On attend que le port soit sur écoute.
+  while (!isListening());  // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets  
-  while (trame != 0x1B3B7359) {
+  while (trame != 0x1B3B7359) {  // PRO3 (0x1B,0x3B), REP_STATUS_CLAVIER (0x73), CODE_RECEPTION_CLAVIER (0x59)
     if (available() > 0) {
       trame = (trame << 8) + readByte();
       //Serial.println(trame, HEX);
     }
   }
   while (!available()>0);  // Indispensable
-  return readByte();  // Octet de status fonctionnement clavier
+  return readByte(); // Octet de statut fonctionnement clavier
 }
 /*--------------------------------------------------------------------*/
 
 byte Minitel::workingAiguillage(byte module) {  // Voir p.136
-  // On récupère l'octet de status d'aiguillage associé à un module :
+  // On récupère l'octet de statut d'aiguillage associé à un module :
   // b7 : bit de parité
   // b6 : 1
   // b5 : 0
@@ -906,8 +1161,8 @@ byte Minitel::workingAiguillage(byte module) {  // Voir p.136
   // b2 : modem             1 : liaison établie
   // b1 : clavier           0 : liaison coupée
   // b0 : écran
-  // L'octet de status contient également l'état de la ressource que constitue le module lui-même (0 : module bloqué ; 1 : module actif)
-  while (!isListening());   // On attend que le port soit sur écoute.
+  // L'octet de statut contient également l'état de la ressource que constitue le module lui-même (0 : module bloqué ; 1 : module actif)
+  while (!isListening());  // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets
   while (trame != (0x1B3B63 << 8 | module)) {  // PRO3 (0x1B,0x3B), FROM (0x63), code réception ou émission du module
     if (available() > 0) {
@@ -916,7 +1171,7 @@ byte Minitel::workingAiguillage(byte module) {  // Voir p.136
     }
   }
   while (!available()>0);  // Indispensable
-  return readByte(); // Octet de status associé à un module
+  return readByte(); // Octet de statut associé à un module
 }
 /*--------------------------------------------------------------------*/
 
@@ -925,7 +1180,7 @@ byte Minitel::workingModem() {  // Voir p.126
   // On récupère uniquement la séquence immédiate 0x1359
   // en cas de connexion confirmé, la séquence 0x1353 s'ajoutera - non traité ici
   // en cas de timeout (environ 40sec), la séquence 0x1359 s'ajoutera - non traité ici
-  while (!isListening());   // On attend que le port soit sur écoute.
+  while (!isListening());  // On attend que le port soit sur écoute.
   unsigned int trame = 0;  // 16 bits = 2 octets
   while (trame >> 8 != 0x13) {
     if (available() > 0) {
@@ -942,7 +1197,7 @@ unsigned long Minitel::getCursorXY() {  // Voir p.98
   writeByte(ESC);
   writeByte(0x61);
   // Réponse
-  while (!isListening());   // On attend que le port soit sur écoute.
+  while (!isListening());  // On attend que le port soit sur écoute.
   unsigned long trame = 0;  // 32 bits = 4 octets  
   while (trame >> 16 != US) {
     if (available() > 0) {
