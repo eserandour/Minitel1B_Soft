@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 14 mars 2022 à 14h40
-   Copyright 2016-2022 - Eric Sérandour
-   http://3615.entropie.org
+   Minitel1B_Soft - Fichier d'en-tête - Version du 28 février 2023 à 21h55
+   Copyright 2016-2023 - Eric Sérandour
+   https://entropie.org/3615/
 
    Remerciements à :
    BorisFR, iodeo
@@ -208,13 +208,17 @@
 #define CODE_RECEPTION_MODEM       0x5A
 #define CODE_RECEPTION_PRISE       0x5B
 
-// 3 Commandes d'aiguillages et de blocage des modules
+// 3 Commandes d'aiguillages et de blocage des modules (voir p.134)
 // 3.2 Format des commandes (voir p.135)
 #define AIGUILLAGE_OFF             0x60
 #define AIGUILLAGE_ON              0x61
-// 3.4 Demande de statut d'aiguillages des modules
+// 3.4 Demande de statut d'aiguillages des modules (voir p.136)
 #define TO                         0x62
 #define FROM                       0x63
+
+// 6 Demandes d'identification et de position curseur (voir p.139)
+// 6.1 Demande d'identification du Minitel (voir p.139)
+#define ENQROM                     0x7B
 
 // 7 Commandes relatives au modem (voir p.139)
 #define CONNEXION                  0x68
@@ -258,6 +262,7 @@
 
 
 
+
 ////////////////////////////////////////////////////////////////////////
 
 class Minitel : public SoftwareSerial
@@ -265,10 +270,14 @@ class Minitel : public SoftwareSerial
 public:
   Minitel(int rx, int tx);
   
-  // Ecrire un octet ou un mot / Lire un octet
+  // Ecrire un octet, un mot ou un code de 4 octets maximum / Lire un octet
   void writeByte(byte b);
   void writeWord(word w);
+  void writeCode(unsigned long code);  // 4 octets maximum
   byte readByte();
+  
+  // Identification du type de Minitel
+  unsigned long identifyDevice();
   
   // Vitesse de la liaison série
   // A la mise sous tension du Minitel, la vitesse des échanges entre
@@ -328,16 +337,17 @@ public:
   // Standards
   byte standardTeleinformatique();  // Standard Télétel => Standard Téléinformatique 80 colonnes (Possibilités de programmation moins étendues)
   byte standardTeletel();           // Standard Téléinformatique => Standard Télétel (inclut les modes Vidéotex et Mixte)
-  
+
   // Contenu
-  void attributs(byte attribut); 
-  void print(String chaine);
+  void attributs(byte attribut);
+  void print(String chaine);  // UTF-8 => Codes Minitel
   void println(String chaine);
   void println();
-  void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7B à 0x7F.
-  void printDiacriticChar(unsigned char caractere);  // Caractère avec accent, tréma ou cédille.  
+  void printChar(char caractere);  // Caractère du jeu G0 exceptés ceux codés 0x60, 0x7E, 0x7F.
+  // void printDiacriticChar(unsigned char caractere);  // Caractère avec accent, tréma ou cédille.  // Obsolète depuis le 26/02/2023
   void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
-  byte getCharByte(char caractere); 
+  byte getCharByte(char caractere);
+  String getString(unsigned long code);  // Unicode => UTF-8
   void graphic(byte b, int x, int y);  // Jeu G1. Voir page 101. Sous la forme 0b000000 à 0b111111 en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
   void graphic(byte b);  // Voir la ligne ci-dessus.
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
@@ -347,9 +357,9 @@ public:
   void rect(int x1, int y1, int x2, int y2);  // Rectangle défini par 2 points.
   void hLine(int x1, int y, int x2, int position);  // Ligne horizontale. position = TOP, CENTER ou BOTTOM.
   void vLine(int x, int y1, int y2, int position, int sens);  // Ligne verticale. position = LEFT, CENTER ou RIGHT. sens = DOWN ou UP.
-
+  
   // Clavier
-  unsigned long getKeyCode(bool ascii = true);
+  unsigned long getKeyCode(bool unicode = true);  // Codes Minitel => Unicode par défaut (si false : pas de conversion)
   byte smallMode();  // Mode minuscules du clavier
   byte capitalMode();  // Mode majuscules du clavier
   byte extendedKeyboard();  // Clavier étendu
@@ -365,11 +375,13 @@ public:
 private: 
   byte currentSize = GRANDEUR_NORMALE;
   boolean isValidChar(byte index);
-  boolean isDiacritic(unsigned char caractere);
+  // boolean isDiacritic(unsigned char caractere);  // Obsolète depuis le 26/02/2023
+  boolean isVisualisable(unsigned long code);
   void writeBytesP(int n);  // Pn, Pr, Pc
   
   // Protocole
   void writeBytesPRO(int n);  // PRO1, PRO2 ou PRO3
+  unsigned long identificationBytes();
   int workingSpeed();
   byte workingStandard(unsigned long sequence);
   byte workingMode();
