@@ -8,7 +8,7 @@ http://543210.free.fr/TV/stum1b.pdf
 
 Dernière Version : 28/02/2023 à 21h55.<br>
 
-28/02/2023
+28/02/2023<br>
 Modification des exemples :<br>
 Tweet_3615.ino<br>
 
@@ -31,7 +31,8 @@ unsigned long identificationBytes()<br>
 25/06/2022 - Sur proposition de iodeo :<br>
 Correction d'un bug dans la fonction byte reset()
 
-24/04/2022 - Ajout d'un exemple : Portrait.ino (affichage d'une image)<br>
+24/04/2022<br>
+Ajout d'un exemple : Portrait.ino (affichage d'une image)<br>
 
 14/03/2022 - Sur proposition de iodeo :<br>
 Correction de bugs mineurs dans echo(boolean commande) et changeSpeed(int bauds).<br>
@@ -41,10 +42,12 @@ Ajout d'une option qui permet de désactiver la conversion des caractères en as
 unsigned long getKeyCode(bool ascii = true)<br>
 Ajout d'un exemple basique : HelloWorld.ino
 
-02/07/2021 - 1 nouvelle fonction :<br>
+02/07/2021<br>
+1 nouvelle fonction :<br>
 byte reset()<br>
 
-01/07/2021 - 1 nouvelle fonction :<br>
+01/07/2021<br>
+1 nouvelle fonction :<br>
 byte statusAiguillage(byte module)<br>
 et mise à jour de :<br>
 byte pageMode()<br>
