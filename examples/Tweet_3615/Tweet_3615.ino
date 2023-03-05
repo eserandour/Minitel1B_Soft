@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   3615 - Version du 28 février 2023 à 21h55
+   3615 - Version du 6 mars 2023 à 00h03
    Copyright 2017-2023 - Eric Sérandour
    
    Documentation utilisée :
@@ -42,6 +42,8 @@ const int NB_LIGNES_EXPRESSION = 3;
 const String VIDE = ".";
 
 unsigned long touche;
+const int TAILLE_CACHE = 20;
+int cache[TAILLE_CACHE] = {0};  // Utilisé pour enregistrer le nombre d'octets des caractères spéciaux
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -95,6 +97,9 @@ void champVide(int premiereLigne, int nbLignes)
   }
   texte="";
   nbCaracteres=0;
+  for (int i=0; i<TAILLE_CACHE; i++) {
+    cache[i] = 0;
+  }
   minitel.moveCursorXY(31,24);
   minitel.print("puis ");
   minitel.attributs(INVERSION_FOND);
@@ -107,14 +112,31 @@ void champVide(int premiereLigne, int nbLignes)
 ////////////////////////////////////////////////////////////////////////
 
 void correction(int nbLignes) {
+  boolean texteCorrige = false;
   if ((nbCaracteres > 0) && (nbCaracteres <= 40*nbLignes)) {
-    if (nbCaracteres != 40*nbLignes) { minitel.moveCursorLeft(1); }
-    minitel.attributs(CARACTERE_BLEU);
-    minitel.print(VIDE);
-    minitel.attributs(CARACTERE_BLANC);
-    minitel.moveCursorLeft(1);
-    texte = texte.substring(0,texte.length()-1);
-    nbCaracteres--;
+    unsigned int index = texte.length()-1;
+    if (texte.charAt(index) >> 8) {  // Caractère spécial
+      if (cache[0] != 0) {
+        texte = texte.substring(0,texte.length()-cache[0]);
+        texteCorrige = true;
+        for (int i=0; i<TAILLE_CACHE-1; i++) {
+          cache[i]=cache[i+1];
+        }
+        cache[TAILLE_CACHE-1] = 0;
+      }
+    }
+    else {
+      texte = texte.substring(0,texte.length()-1);
+      texteCorrige = true;
+    }
+    if (texteCorrige) {
+      nbCaracteres--;
+      if (nbCaracteres != 40*nbLignes) { minitel.moveCursorLeft(1); }
+      minitel.attributs(CARACTERE_BLEU);
+      minitel.print(VIDE);
+      minitel.attributs(CARACTERE_BLANC);
+      minitel.moveCursorLeft(1);
+    }
   }
 }
 
@@ -137,14 +159,20 @@ void lectureChamp(int premiereLigne, int nbLignes) {
         (touche != ENVOI)) {
       if (nbCaracteres < 40*nbLignes) {
         nbCaracteres++;
-        // texte += char(touche);
         texte += minitel.getString(touche);
+        int nbBytes = minitel.getNbBytes (touche);
+        if (nbBytes > 1) {  // Caractère spécial
+          for (int i=TAILLE_CACHE-1; i>0; i--) {
+            cache[i]=cache[i-1];
+          }
+          cache[0] = nbBytes;
+        }
       }
       if (nbCaracteres == 40*nbLignes) {
         minitel.moveCursorXY(40,(premiereLigne-1)+nbLignes);
       }
     }
-  switch (touche) {
+    switch (touche) {
     case ENVOI : 
       fin = true;
       break;
@@ -154,7 +182,7 @@ void lectureChamp(int premiereLigne, int nbLignes) {
     case CORRECTION :
       correction(nbLignes);
       break;
-  }    
+    }    
   }
 }
 
