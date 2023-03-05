@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 28 février 2023 à 21h55
+   Minitel1B_Soft - Fichier source - Version du 5 mars 2023 à 21h27
    Copyright 2016-2023 - Eric Sérandour
    https://entropie.org/3615/
 
@@ -118,6 +118,7 @@ unsigned long Minitel::identifyDevice() {  // Voir p.139
 
   // Codes d'identification de l'octet de poids fort :
   /*
+     Philips       : 0x42
      Telic-Alcatel : 0x43
      à compléter...
   */
@@ -671,6 +672,24 @@ String Minitel::getString(unsigned long code) {
   }
   return str;
 }
+/*--------------------------------------------------------------------*/
+
+int Minitel::getNbBytes(unsigned long code) {
+  // Cette fonction est à utiliser en association avec getString(unsigned long code) juste ci-dessus
+  // Elle renvoie le nombre d'octets d'un caractère codé en String UTF-8
+  int nbBytes = 0;
+  if (isVisualisable(code)) {
+    if (code < 0x80) { // U+0000 à U+007F
+      nbBytes = 1;  // 1 octet
+    } else if (code < 0x800) { // U+0080 à U+07FF
+      nbBytes = 2;  // 2 octets
+    } else if(code < 0x10000) { // U+0800 à U+FFFF
+      nbBytes = 3;  // 3 octets
+    }
+  }
+  return nbBytes;
+}
+
 /*--------------------------------------------------------------------*/
 
 void Minitel::graphic(byte b, int x, int y) {
