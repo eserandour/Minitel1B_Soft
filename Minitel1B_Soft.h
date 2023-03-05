@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier d'en-tête - Version du 28 février 2023 à 21h55
+   Minitel1B_Soft - Fichier d'en-tête - Version du 5 mars 2023 à 21h27
    Copyright 2016-2023 - Eric Sérandour
    https://entropie.org/3615/
 
@@ -348,6 +348,7 @@ public:
   void printSpecialChar(byte b);  // Caractère du jeu G2. Voir plus haut, au niveau de 1.2.3, les constantes possibles.
   byte getCharByte(char caractere);
   String getString(unsigned long code);  // Unicode => UTF-8
+  int getNbBytes(unsigned long code);  // À utiliser en association avec getString(unsigned long code) juste ci-dessus.
   void graphic(byte b, int x, int y);  // Jeu G1. Voir page 101. Sous la forme 0b000000 à 0b111111 en allant du coin supérieur gauche au coin inférieur droit. En colonne x et rangée y.
   void graphic(byte b);  // Voir la ligne ci-dessus.
   void repeat(int n);  // Permet de répéter le dernier caractère visualisé avec les attributs courants de la position active d'écriture.
