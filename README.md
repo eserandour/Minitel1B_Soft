@@ -6,10 +6,10 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-<b>Dernière Version :</b> 06/03/2023 à 00h03.<br>
+<b>Dernière Version :</b> 06/03/2023 à 17h49.<br>
 
 06/03/2023<br>
-Mise à jour de l'exemple :<br>
+<b>Mise à jour de l'exemple</b> pour le rendre plus réactif (versions sans cache) :<br>
 Tweet_3615.ino<br>
 
 05/03/2023<br>
