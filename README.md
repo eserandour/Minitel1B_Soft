@@ -9,7 +9,8 @@ http://543210.free.fr/TV/stum1b.pdf
 <b>Dernière Version :</b> 06/03/2023 à 17h49.<br>
 
 06/03/2023<br>
-<b>Mise à jour de l'exemple</b> Tweet_3615.ino<br>
+<b>Mise à jour de l'exemple :</b><br>
+Tweet_3615.ino<br>
 
 05/03/2023<br>
 <b>Ajout d'une nouvelle fonction :</b><br>
