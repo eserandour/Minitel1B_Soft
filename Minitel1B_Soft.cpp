@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 12 mars 2023 à 04h04
+   Minitel1B_Soft - Fichier source - Version du 12 mars 2023 à 04h55
    Copyright 2016-2023 - Eric Sérandour
    https://entropie.org/3615/
 
@@ -796,11 +796,6 @@ unsigned long Minitel::getKeyCode(bool unicode) {
       if (caractere == 0x13) {  // Les touches RETOUR REPETITION GUIDE ANNULATION SOMMAIRE CORRECTION SUITE CONNEXION_FIN ont un code qui commence par 0x13
           while (!available()>0);  // Indispensable
           caractere = readByte();  // Les touches de fonction sont codées sur 2 octets (0x13..)
-          caractere = 0;
-          code = 0;
-      }
-      // Bug 3 : Pour éviter de compter un caractère lorsqu'on appuie sur la touche Carriage Return après avoir appuyé sur une touche avec accent ou tréma
-      if (caractere == CR) {  // Touche Carriage Return (0x0D)
           caractere = 0;
           code = 0;
       }
