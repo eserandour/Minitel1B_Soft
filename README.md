@@ -6,10 +6,10 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-<b>Dernière Version :</b> 12/03/2023 à 04h04<br>
+<b>Dernière Version :</b> 12/03/2023 à 04h55<br>
 
 12/03/2023<br>
-<b>Correction de trois bugs mineurs</b> dans getKeyCode(bool unicode).<br>
+<b>Correction de deux bugs mineurs</b> dans getKeyCode(bool unicode).<br>
 
 06/03/2023<br>
 <b>Mise à jour de l'exemple :</b><br>
