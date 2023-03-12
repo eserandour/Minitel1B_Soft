@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 12 mars 2023 à 00h35
+   Minitel1B_Soft - Fichier source - Version du 12 mars 2023 à 02h47
    Copyright 2016-2023 - Eric Sérandour
    https://entropie.org/3615/
 
@@ -782,7 +782,7 @@ unsigned long Minitel::getKeyCode(bool unicode) {
     // Les diacritiques (3 codes)
     if ((code == 0x1941) || (code == 0x1942) || (code == 0x1943) || (code == 0x1948) || (code == 0x194B)) {  // Accents, tréma, cédille
 
-      // Pour éviter de compter un caractère lorsqu'on appuie plusieurs fois de suite sur une touche avec accent ou tréma
+      // Bug 1 : Pour éviter de compter un caractère lorsqu'on appuie plusieurs fois de suite sur une touche avec accent ou tréma
       byte caractere = 0x19;
       while (caractere == 0x19) {  
         while (!available()>0);  // Indispensable
@@ -792,6 +792,14 @@ unsigned long Minitel::getKeyCode(bool unicode) {
           caractere = readByte();
           caractere = 0x19;
         }
+      }
+
+      // Bug 2 : Pour éviter de compter un caractère lorsqu'on appuie sur les touches de fonction après avoir appuyé sur une touche avec accent ou tréma
+      if (caractere == 0x13) {  // Les touches RETOUR REPETITION GUIDE ANNULATION SOMMAIRE CORRECTION SUITE CONNEXION_FIN ont un code qui commence par 0x13
+          while (!available()>0);  // Indispensable
+          caractere = readByte();  // Les touches de fonction sont codées sur 2 octets (0x13..)
+          caractere = 0;
+          code = 0;
       }
 
       code = (code << 8) + caractere;
