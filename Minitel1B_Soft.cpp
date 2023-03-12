@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 /*
-   Minitel1B_Soft - Fichier source - Version du 5 mars 2023 à 21h27
+   Minitel1B_Soft - Fichier source - Version du 12 mars 2023 à 00h35
    Copyright 2016-2023 - Eric Sérandour
    https://entropie.org/3615/
 
@@ -781,8 +781,19 @@ unsigned long Minitel::getKeyCode(bool unicode) {
     code = (code << 8) + readByte();
     // Les diacritiques (3 codes)
     if ((code == 0x1941) || (code == 0x1942) || (code == 0x1943) || (code == 0x1948) || (code == 0x194B)) {  // Accents, tréma, cédille
-      while (!available()>0);  // Indispensable
-      byte caractere = readByte();
+
+      // Pour éviter de compter un caractère lorsqu'on appuie plusieurs fois de suite sur une touche avec accent ou tréma
+      byte caractere = 0x19;
+      while (caractere == 0x19) {  
+        while (!available()>0);  // Indispensable
+        caractere = readByte();
+        if (caractere == 0x19) {
+          while (!available()>0);  // Indispensable
+          caractere = readByte();
+          caractere = 0x19;
+        }
+      }
+
       code = (code << 8) + caractere;
       if (unicode) {
         switch (code) {  // On convertit le code reçu en unicode
