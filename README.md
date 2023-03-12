@@ -6,7 +6,8 @@ http://543210.free.fr/TV/stum1b.pdf
 
 <b>Historique</b> :
 
-<b>Dernière Version :</b> 12/03/2023 à 05h02<br>
+<b>Dernière Version :</b> 12/03/2023 à 05h02.<br>
+J'utilise la version 1.8.19 d'Arduino pour compiler.
 
 12/03/2023<br>
 <b>Correction de deux bugs mineurs</b> dans getKeyCode(bool unicode).<br>
